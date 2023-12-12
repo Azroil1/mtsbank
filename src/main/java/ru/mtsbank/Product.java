@@ -22,7 +22,7 @@ public class Product {
         this.discount = discount;
     }
 
-    public static void calculatingTheAmountOfTheProduct(Product product){
+    public static void costCalculation(Product product){
         System.out.printf("Сумма товара без скидки: %.2f\n", product.costProduct*product.countProduct);
         System.out.printf("Сумма товара со скидкой: %.2f\n",product.discount/100*product.costProduct*product.countProduct);
     }
