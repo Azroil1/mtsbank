@@ -1,4 +1,4 @@
-package ru.mtsbank;
+package ru.mtsbank.HW1;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,6 +13,5 @@ public class Main {
 
         Product product3 = new Product(10,64.3, 59.1);
         Product.calculatingTheAmountOfTheProduct(product3);
-
     }
 }

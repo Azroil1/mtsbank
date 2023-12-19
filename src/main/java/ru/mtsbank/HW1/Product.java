@@ -1,4 +1,4 @@
-package ru.mtsbank;
+package ru.mtsbank.HW1;
 
 public class Product {
     /**
