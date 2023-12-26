@@ -4,7 +4,7 @@
 # Editor-based HTTP Client requests
 /httpRequests/
 # Datasource local storage ignored files
-/.idea
-/.gradle
-/build
+/.idea/
+/.gradle/
+/build/
 
