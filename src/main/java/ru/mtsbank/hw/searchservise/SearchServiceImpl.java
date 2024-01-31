@@ -39,11 +39,16 @@ public class SearchServiceImpl implements SearchService{
     public List<AbstractAnimal> findDuplicate(AbstractAnimal[] animals)  {
         List<AbstractAnimal> animalList = new ArrayList<>();
         Set<AbstractAnimal> animalSet = new HashSet<>();
-
         animalSet.addAll(List.of(animals));
         animalList.addAll(List.of(animals));
-        animalList.removeAll(animalSet);
-
+        for (AbstractAnimal i : animalSet){
+            animalList.remove(i);
+        }
+        animalSet.clear();
+        animalSet.addAll(animalList);
+        animalList.clear();
+        animalList.addAll(animalSet);
+        System.out.println(animalList);
         return animalList;
     }
 }

@@ -60,6 +60,7 @@ public class SearchServiceImplTests {
     @DisplayName("Тест метода findDuplicate")
     public void findDuplicate() throws CloneNotSupportedException {
         initAnimal();
-        Assertions.assertArrayEquals(searchService.findDuplicate((new AbstractAnimal[]{animals[1], animals[1]})).toArray(), new AbstractAnimal[] {animals[1]});
+        Assertions.assertArrayEquals(searchService.findDuplicate((new AbstractAnimal[]{animals[1], animals[1],animals[1],animals[2],animals[2]})).toArray(),
+                new AbstractAnimal[] {animals[1],animals[2]});
     }
 }
