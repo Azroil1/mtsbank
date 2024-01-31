@@ -38,14 +38,12 @@ public class SearchServiceImpl implements SearchService{
     @Override
     public List<AbstractAnimal> findDuplicate(AbstractAnimal[] animals)  {
         List<AbstractAnimal> animalList = new ArrayList<>();
-        Map<AbstractAnimal, Integer> animalIntegerMap = new HashMap<>();
-        for(int i = 0; i < animals.length; i++) {
-            if (animalIntegerMap.containsKey(animals[i])) {
-                animalList.add(animals[i]);
-            } else {
-                animalIntegerMap.put(animals[i], 1);
-            }
-        }
+        Set<AbstractAnimal> animalSet = new HashSet<>();
+
+        animalSet.addAll(List.of(animals));
+        animalList.addAll(List.of(animals));
+        animalList.removeAll(animalSet);
+
         return animalList;
     }
 }
