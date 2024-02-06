@@ -12,6 +12,6 @@ public class Main {
         SearchService service = new SearchServiceImpl();
         System.out.println(Arrays.toString(service.findLeapYearNames(createAnimalService.createAnimal(23))));
         System.out.println(Arrays.deepToString(service.findOlderAnimal(createAnimalService.createAnimal(),5)));
-        service.findDuplicate(createAnimalService.createAnimal(30));
+        System.out.println(service.findDuplicate(createAnimalService.createAnimal(30)));
     }
 }

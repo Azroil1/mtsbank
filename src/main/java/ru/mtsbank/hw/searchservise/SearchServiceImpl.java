@@ -3,8 +3,7 @@ package ru.mtsbank.hw.searchservise;
 import ru.mtsbank.hw.animal.AbstractAnimal;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SearchServiceImpl implements SearchService{
 
@@ -37,13 +36,19 @@ public class SearchServiceImpl implements SearchService{
     }
 
     @Override
-    public void findDuplicate(AbstractAnimal[] animals)  {
-        for(int i = 0; i < animals.length; i++){
-            for(int j = i; j < animals.length; j++){
-                if(animals[i].equals(animals[j])){
-                    System.out.println(animals[j]);
-                }
-            }
+    public List<AbstractAnimal> findDuplicate(AbstractAnimal[] animals)  {
+        List<AbstractAnimal> animalList = new ArrayList<>();
+        Set<AbstractAnimal> animalSet = new HashSet<>();
+        animalSet.addAll(List.of(animals));
+        animalList.addAll(List.of(animals));
+        for (AbstractAnimal i : animalSet){
+            animalList.remove(i);
         }
+        animalSet.clear();
+        animalSet.addAll(animalList);
+        animalList.clear();
+        animalList.addAll(animalSet);
+        System.out.println(animalList);
+        return animalList;
     }
 }

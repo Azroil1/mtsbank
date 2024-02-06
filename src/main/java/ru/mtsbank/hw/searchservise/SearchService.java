@@ -2,6 +2,8 @@ package ru.mtsbank.hw.searchservise;
 
 import ru.mtsbank.hw.animal.AbstractAnimal;
 
+import java.util.List;
+
 public interface SearchService {
     /**
      * Метод находит всех животных которые родились в високосный год
@@ -16,5 +18,5 @@ public interface SearchService {
     /**
      * Вывод дупликатов животных
      * */
-    void findDuplicate(AbstractAnimal[] animals) throws CloneNotSupportedException;
+    List<AbstractAnimal> findDuplicate(AbstractAnimal[] animals) throws CloneNotSupportedException;
 }
