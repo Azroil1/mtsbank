@@ -8,3 +8,8 @@
 /.gradle/
 /build/
 /lib
+dradle/
+gradlew
+gradlew.bat
+out/
+settings.gradle

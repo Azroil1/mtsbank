@@ -7,25 +7,24 @@ import org.mockito.Mock;
 import ru.mtsbank.hw.animal.AbstractAnimal;
 import ru.mtsbank.hw.animalservice.CreateAnimalService;
 import ru.mtsbank.hw.animalservice.CreateAnimalServiceImpl;
-import ru.mtsbank.hw.searchservise.SearchService;
-import ru.mtsbank.hw.searchservise.SearchServiceImpl;
+import ru.mtsbank.hw.animalsrepository.AnimalRepository;
+import ru.mtsbank.hw.animalsrepository.AnimalRepositoryImpl;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
 
 
-public class SearchServiceImplTests {
+public class AnimalRepositoryImplTests {
     @Mock
     public static AbstractAnimal[] animals;
     @Mock
     public static CreateAnimalService createAnimalService;
-    public static SearchService searchService;
+    @Mock
+    public static AnimalRepository animalRepository;
 
     @BeforeAll
     public static void initAnimal(){
         createAnimalService = new CreateAnimalServiceImpl();
-        searchService = new SearchServiceImpl();
+        animalRepository = new AnimalRepositoryImpl();
         animals = createAnimalService.checkTypeAnimal(5);
         animals[0].setBirthDate(LocalDate.of(2015,4,20));
         animals[1].setBirthDate(LocalDate.of(2017,10,23));
@@ -40,7 +39,8 @@ public class SearchServiceImplTests {
     public void findLeapYearsTest(){
         initAnimal();
         AbstractAnimal[] actual1 = new AbstractAnimal[] {animals[2],animals[4]};
-        Assertions.assertArrayEquals(searchService.findLeapYearNames(animals),actual1);
+        System.out.println(animalRepository.findLeapYearNames(animals));
+        Assertions.assertArrayEquals(animalRepository.findLeapYearNames(animals),actual1);
     }
 
     @ParameterizedTest
@@ -50,9 +50,9 @@ public class SearchServiceImplTests {
         initAnimal();
 
         if (values == 7) {
-            Assertions.assertArrayEquals(searchService.findOlderAnimal(animals, values), new AbstractAnimal[] {animals[1]});
+            Assertions.assertArrayEquals(animalRepository.findOlderAnimal(animals, values), new AbstractAnimal[] {animals[1]});
         } else {
-            Assertions.assertArrayEquals(searchService.findOlderAnimal(animals, values), animals);
+            Assertions.assertArrayEquals(animalRepository.findOlderAnimal(animals, values), animals);
         }
     }
 
@@ -60,7 +60,7 @@ public class SearchServiceImplTests {
     @DisplayName("Тест метода findDuplicate")
     public void findDuplicate() throws CloneNotSupportedException {
         initAnimal();
-        Assertions.assertArrayEquals(searchService.findDuplicate((new AbstractAnimal[]{animals[1], animals[1],animals[1],animals[2],animals[2]})).toArray(),
+        Assertions.assertArrayEquals(animalRepository.findDuplicate((new AbstractAnimal[]{animals[1], animals[1],animals[1],animals[2],animals[2]})).toArray(),
                 new AbstractAnimal[] {animals[1],animals[2]});
     }
 }

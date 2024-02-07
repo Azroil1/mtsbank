@@ -1,11 +1,26 @@
-package ru.mtsbank.hw.searchservise;
+package ru.mtsbank.hw.animalsrepository;
 
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.mtsbank.hw.animal.AbstractAnimal;
+import ru.mtsbank.hw.animalservice.CreateAnimalServiceImpl;
 
 import java.time.LocalDate;
 import java.util.*;
 
-public class SearchServiceImpl implements SearchService{
+@Repository
+public class AnimalRepositoryImpl implements AnimalRepository {
+
+    private AbstractAnimal[] animals;
+
+    @Autowired
+    CreateAnimalServiceImpl createAnimalService;
+
+    @PostConstruct
+    public void initAnimals(int number){
+        animals = createAnimalService.createAnimal(number);
+    }
 
     @Override
     public AbstractAnimal[] findLeapYearNames(AbstractAnimal[] animals) {
@@ -50,5 +65,11 @@ public class SearchServiceImpl implements SearchService{
         animalList.addAll(animalSet);
         System.out.println(animalList);
         return animalList;
+    }
+    public void printDuplicate(){
+        List<AbstractAnimal> list = findDuplicate(animals);
+        for(AbstractAnimal animal:list){
+            System.out.println(animal);
+        }
     }
 }
