@@ -6,6 +6,8 @@ import java.util.Random;
 
 public interface CreateAnimalService {
 
+    AbstractAnimal[] createAnimal(int num);
+
     /**
      * Метод который проверяет
      * к кому типу относиться животное

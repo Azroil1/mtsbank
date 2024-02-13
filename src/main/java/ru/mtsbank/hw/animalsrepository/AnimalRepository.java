@@ -1,10 +1,10 @@
-package ru.mtsbank.hw.searchservise;
+package ru.mtsbank.hw.animalsrepository;
 
 import ru.mtsbank.hw.animal.AbstractAnimal;
 
 import java.util.List;
 
-public interface SearchService {
+public interface AnimalRepository {
     /**
      * Метод находит всех животных которые родились в високосный год
      * */
