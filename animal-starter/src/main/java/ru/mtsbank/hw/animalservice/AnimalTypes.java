@@ -1,5 +1,6 @@
 package ru.mtsbank.hw.animalservice;
 
+import org.springframework.stereotype.Component;
 
 public enum AnimalTypes {
     BARBUS,

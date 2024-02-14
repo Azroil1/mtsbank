@@ -12,7 +12,6 @@ import ru.mtsbank.hw.animal.pet.models.Hamster;
 import ru.mtsbank.hw.animal.predator.models.Lion;
 import ru.mtsbank.hw.animal.predator.models.Shark;
 import ru.mtsbank.hw.animal.predator.models.Wolf;
-import ru.mtsbank.hw.config.AnimalProperties;
 
 import java.math.BigDecimal;
 

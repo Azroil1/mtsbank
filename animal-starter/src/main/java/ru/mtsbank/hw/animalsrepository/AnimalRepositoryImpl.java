@@ -18,7 +18,15 @@ import java.util.Set;
 @Repository
 public class AnimalRepositoryImpl implements AnimalRepository {
 
-    AbstractAnimal[] animals;
+    private AbstractAnimal[] animals;
+
+    public AbstractAnimal[] getAnimals() {
+        return animals;
+    }
+
+    public void setAnimals(AbstractAnimal[] animals) {
+        this.animals = animals;
+    }
 
     private CreateAnimalService createAnimalService;
 
@@ -34,11 +42,10 @@ public class AnimalRepositoryImpl implements AnimalRepository {
     @Override
     public AbstractAnimal[] findLeapYearNames() {
         List<AbstractAnimal> list = new ArrayList<>();
-        for(int i = 0; i < animals.length; i++){
-            System.out.println(animals[i]);
-            if(animals[i].getBirthDate() != null) {
-                if (animals[i].getBirthDate().isLeapYear()) {
-                    list.add(animals[i]);
+        for (AbstractAnimal animal : animals) {
+            if (animal.getBirthDate() != null) {
+                if (animal.getBirthDate().isLeapYear()) {
+                    list.add(animal);
                 }
             }
         }
