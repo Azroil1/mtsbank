@@ -13,6 +13,6 @@ gradlew
 gradlew.bat
 out/
 settings.gradle
-gradle/
 animal-starter/.gradle
 animal-starter/build
+gradle
