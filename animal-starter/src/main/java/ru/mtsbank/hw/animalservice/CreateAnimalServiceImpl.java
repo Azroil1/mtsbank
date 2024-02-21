@@ -1,8 +1,6 @@
 package ru.mtsbank.hw.animalservice;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
 import ru.mtsbank.hw.animal.AbstractAnimal;
 import ru.mtsbank.hw.animal.fish.Fish;
 import ru.mtsbank.hw.animal.herbivores.Herbivores;
@@ -26,7 +24,7 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
         this.properties = properties;
     }
 
-
+    @Override
     public AbstractAnimal createAnimal() {
         AbstractAnimal abstractAnimals;
 
