@@ -28,7 +28,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 public class AnimalRepositoryImplTests {
     @Mock
-    public static CreateAnimalService createAnimalService;
+    public static CreateAnimalServiceImpl createAnimalService;
 
     @Mock
     public  static AnimalProperties animalProperties;
@@ -51,7 +51,7 @@ public class AnimalRepositoryImplTests {
         stringListHashMap.put("Cat",List.of(new Cat("fe", "ed", new BigDecimal(213.3), "fdf")));
         stringListHashMap.get("Cat").get(0).setBirthDate(LocalDate.of(2013,5,15));
 
-        CreateAnimalServiceImpl.setAnimalMap(stringListHashMap);
+        createAnimalService.setAnimalMap(stringListHashMap);
 
     }
 
@@ -92,7 +92,7 @@ public class AnimalRepositoryImplTests {
         when(animalRepository.findDuplicate()).thenCallRealMethod();
         Map<String,Integer> stringIntegerMap = new HashMap<>();
         stringIntegerMap.put("Dog", 1);
-        System.out.println(CreateAnimalServiceImpl.getAnimalMap());
+        System.out.println(createAnimalService.getAnimalMap());
         Assertions.assertEquals(animalRepository.findDuplicate(), stringIntegerMap);
     }
 }

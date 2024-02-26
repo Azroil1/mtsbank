@@ -13,7 +13,7 @@ import java.util.*;
 @Component
 public class CreateAnimalServiceImpl implements CreateAnimalService {
 
-    private static Map<String,List<AbstractAnimal>> animalMap;
+    private Map<String,List<AbstractAnimal>> animalMap;
 
     protected AnimalTypes types;
 
@@ -62,11 +62,11 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
         this.types = types;
     }
 
-    public static Map<String, List<AbstractAnimal>> getAnimalMap() {
+    public Map<String, List<AbstractAnimal>> getAnimalMap() {
         return animalMap;
     }
 
-    public static void setAnimalMap(Map<String, List<AbstractAnimal>> animalMap) {
-        CreateAnimalServiceImpl.animalMap = animalMap;
+    public void setAnimalMap(Map<String, List<AbstractAnimal>> animalMap) {
+        this.animalMap = animalMap;
     }
 }

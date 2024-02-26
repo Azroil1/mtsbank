@@ -10,11 +10,12 @@ import ru.mtsbank.hw.animalservice.CreateAnimalServiceImpl;
 import java.time.LocalDate;
 import java.util.*;
 
+import static java.lang.Integer.compare;
+
 @Repository
 public class AnimalRepositoryImpl implements AnimalRepository {
 
-    @Autowired
-    private AnimalComparator animalComparator;
+
     @Autowired
     private CreateAnimalServiceImpl createAnimalServiceImpl;
 
@@ -29,7 +30,7 @@ public class AnimalRepositoryImpl implements AnimalRepository {
     @Override
     public Map<String,LocalDate> findLeapYearNames() {
         Map<String,LocalDate> mapFindLeapYearNames = new HashMap<>();
-        for (Map.Entry<String, List<AbstractAnimal>> entry : CreateAnimalServiceImpl.getAnimalMap().entrySet()) {
+        for (Map.Entry<String, List<AbstractAnimal>> entry : createAnimalServiceImpl.getAnimalMap().entrySet()) {
             for(AbstractAnimal animal : entry.getValue()){
                 if(animal.getBirthDate().isLeapYear()){
                     mapFindLeapYearNames.put(entry.getKey() + " " + animal.getName(), animal.getBirthDate());
@@ -39,17 +40,19 @@ public class AnimalRepositoryImpl implements AnimalRepository {
         return mapFindLeapYearNames;
     }
 
+    Comparator<AbstractAnimal> abstractAnimalComparator = (a1,a2) -> a1.getBirthDate().compareTo(a2.getBirthDate());
+
     @Override
     public Map<AbstractAnimal, Integer> findOlderAnimal(int findYears) {
         Map<AbstractAnimal, Integer> animalIntegerMap = new HashMap<>();
         AbstractAnimal olderAnimal = null;
-        for (Map.Entry<String,List<AbstractAnimal>> entry : CreateAnimalServiceImpl.getAnimalMap().entrySet()) {
+        for (Map.Entry<String,List<AbstractAnimal>> entry : createAnimalServiceImpl.getAnimalMap().entrySet()) {
             for(AbstractAnimal animal : entry.getValue()){
                 if(LocalDate.now().getYear() - animal.getBirthDate().getYear() >= findYears){
                     animalIntegerMap.put(animal, LocalDate.now().getYear() - animal.getBirthDate().getYear());
                 }
                 if (olderAnimal != null) {
-                    if(animalComparator.compare(olderAnimal,animal) > 0) {
+                    if(abstractAnimalComparator.compare(olderAnimal,animal) > 0) {
                         olderAnimal = animal;
                     }
                 } else {
@@ -68,7 +71,7 @@ public class AnimalRepositoryImpl implements AnimalRepository {
     public Map<String, Integer> findDuplicate()  {
         Map<String, Integer> stringIntegerMap = new HashMap<>();
         Set<AbstractAnimal> abstractAnimalSet = new HashSet<>();
-        for(Map.Entry<String, List<AbstractAnimal>> entry: CreateAnimalServiceImpl.getAnimalMap().entrySet()){
+        for(Map.Entry<String, List<AbstractAnimal>> entry: createAnimalServiceImpl.getAnimalMap().entrySet()){
             abstractAnimalSet.addAll(entry.getValue());
             List<AbstractAnimal> listTypeAnimal = new ArrayList<>(entry.getValue());
             for(AbstractAnimal animal : abstractAnimalSet){
