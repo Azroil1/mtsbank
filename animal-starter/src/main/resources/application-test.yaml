@@ -1,0 +1,6 @@
+animal:
+  name:
+    fishNames: TestName1,TestName2,TestName3
+    herbivoresNames: TestName1,TestName2
+    petNames: TestName1
+    predatorNames: TestName1,TestName2,TestName3

@@ -1,13 +1,10 @@
 package ru.mtsbank.hw.animalsrepository;
 
 
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Repository;
 import ru.mtsbank.hw.animal.AbstractAnimal;
 import ru.mtsbank.hw.animalservice.CreateAnimalService;
-import ru.mtsbank.hw.animalservice.CreateAnimalServiceImpl;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,6 +24,7 @@ public class AnimalRepositoryImpl implements AnimalRepository {
     public void setAnimals(AbstractAnimal[] animals) {
         this.animals = animals;
     }
+
 
     private CreateAnimalService createAnimalService;
 
@@ -56,10 +54,10 @@ public class AnimalRepositoryImpl implements AnimalRepository {
     @Override
     public AbstractAnimal[] findOlderAnimal(int N) {
         List<AbstractAnimal> list = new ArrayList<>();
-        for(int i = 0; i < animals.length; i++){
-            if(animals[i].getBirthDate() != null) {
-                if (LocalDate.now().getYear() - animals[i].getBirthDate().getYear() <= N) {
-                    list.add(animals[i]);
+        for (AbstractAnimal animal : animals) {
+            if (animal.getBirthDate() != null) {
+                if (LocalDate.now().getYear() - animal.getBirthDate().getYear() <= N) {
+                    list.add(animal);
                 }
             }
         }

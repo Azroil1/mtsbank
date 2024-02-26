@@ -4,3 +4,6 @@ animal:
     herbivoresNames: black,myHerbivores
     petNames: pet1,pet2,pet3
     predatorNames: predator, predatorbrator
+spring:
+  main:
+    allow-bean-definition-overriding: true
