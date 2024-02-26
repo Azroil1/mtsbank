@@ -2,23 +2,25 @@ package ru.mtsbank.hw.animalsrepository;
 
 import ru.mtsbank.hw.animal.AbstractAnimal;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface AnimalRepository {
     /**
      * Метод находит всех животных которые родились в високосный год
      * */
 
-    AbstractAnimal[] findLeapYearNames();
+    Map<String, LocalDate> findLeapYearNames();
 
     /**
      * Метод находит всех животных старших N лет
      * */
-    AbstractAnimal[] findOlderAnimal(int N);
+    Map<AbstractAnimal,Integer> findOlderAnimal(int N);
     /**
      * Вывод дупликатов животных
      * */
-    List<AbstractAnimal> findDuplicate() throws CloneNotSupportedException;
+     Map<String,Integer> findDuplicate() throws CloneNotSupportedException;
 
     void printDuplicate();
 }

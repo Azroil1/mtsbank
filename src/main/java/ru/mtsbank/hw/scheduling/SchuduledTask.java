@@ -16,8 +16,11 @@ public class SchuduledTask {
 
     @Scheduled(fixedRate = 60000)
     public void getAnimalRepository(){
-        System.out.println(Arrays.toString(animalRepository.findLeapYearNames()));
-        System.out.println("--------------------------------------");
-        System.out.println(Arrays.toString(animalRepository.findOlderAnimal(10)));
+        System.out.println("Woooork!");
+        animalRepository.printDuplicate();
+        System.out.println("-----------------------------------------");
+        System.out.println(animalRepository.findOlderAnimal(12));
+        System.out.println("-----------------------------------------");
+        System.out.println(animalRepository.findLeapYearNames());
     }
 }

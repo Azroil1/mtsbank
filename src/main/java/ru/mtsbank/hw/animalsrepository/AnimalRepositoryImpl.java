@@ -5,86 +5,85 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.mtsbank.hw.animal.AbstractAnimal;
 import ru.mtsbank.hw.animalservice.CreateAnimalService;
+import ru.mtsbank.hw.animalservice.CreateAnimalServiceImpl;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Repository
 public class AnimalRepositoryImpl implements AnimalRepository {
 
-    private AbstractAnimal[] animals;
-
-    public AbstractAnimal[] getAnimals() {
-        return animals;
-    }
-
-    public void setAnimals(AbstractAnimal[] animals) {
-        this.animals = animals;
-    }
-
-
-    private CreateAnimalService createAnimalService;
+    @Autowired
+    private AnimalComparator animalComparator;
+    @Autowired
+    private CreateAnimalServiceImpl createAnimalServiceImpl;
 
     @Autowired
-    public AnimalRepositoryImpl(CreateAnimalService createAnimalService) {
-        this.createAnimalService = createAnimalService;
-        animals = new AbstractAnimal[7];
+    public AnimalRepositoryImpl(CreateAnimalServiceImpl createAnimalServiceImpl) {
+        this.createAnimalServiceImpl = createAnimalServiceImpl;
         for (int i = 0; i < 7; i++) {
-            animals[i] = createAnimalService.createAnimal();
+            createAnimalServiceImpl.createAnimal();
         }
     }
 
     @Override
-    public AbstractAnimal[] findLeapYearNames() {
-        List<AbstractAnimal> list = new ArrayList<>();
-        for (AbstractAnimal animal : animals) {
-            if (animal.getBirthDate() != null) {
-                if (animal.getBirthDate().isLeapYear()) {
-                    list.add(animal);
+    public Map<String,LocalDate> findLeapYearNames() {
+        Map<String,LocalDate> mapFindLeapYearNames = new HashMap<>();
+        for (Map.Entry<String, List<AbstractAnimal>> entry : CreateAnimalServiceImpl.getAnimalMap().entrySet()) {
+            for(AbstractAnimal animal : entry.getValue()){
+                if(animal.getBirthDate().isLeapYear()){
+                    mapFindLeapYearNames.put(entry.getKey() + " " + animal.getName(), animal.getBirthDate());
                 }
             }
         }
-        AbstractAnimal[] abstractAnimals = new AbstractAnimal[list.size()];
-        return list.toArray(abstractAnimals);
+        return mapFindLeapYearNames;
     }
 
     @Override
-    public AbstractAnimal[] findOlderAnimal(int N) {
-        List<AbstractAnimal> list = new ArrayList<>();
-        for (AbstractAnimal animal : animals) {
-            if (animal.getBirthDate() != null) {
-                if (LocalDate.now().getYear() - animal.getBirthDate().getYear() <= N) {
-                    list.add(animal);
+    public Map<AbstractAnimal, Integer> findOlderAnimal(int findYears) {
+        Map<AbstractAnimal, Integer> animalIntegerMap = new HashMap<>();
+        AbstractAnimal olderAnimal = null;
+        for (Map.Entry<String,List<AbstractAnimal>> entry : CreateAnimalServiceImpl.getAnimalMap().entrySet()) {
+            for(AbstractAnimal animal : entry.getValue()){
+                if(LocalDate.now().getYear() - animal.getBirthDate().getYear() >= findYears){
+                    animalIntegerMap.put(animal, LocalDate.now().getYear() - animal.getBirthDate().getYear());
+                }
+                if (olderAnimal != null) {
+                    if(animalComparator.compare(olderAnimal,animal) > 0) {
+                        olderAnimal = animal;
+                    }
+                } else {
+                    olderAnimal = animal;
                 }
             }
         }
-        AbstractAnimal[] abstractAnimals = new AbstractAnimal[list.size()];
-        return list.toArray(abstractAnimals);
+        if(animalIntegerMap.isEmpty()){
+            animalIntegerMap.put(olderAnimal, LocalDate.now().getYear() - olderAnimal.getBirthDate().getYear());
+        }
+
+        return animalIntegerMap;
     }
 
     @Override
-    public List<AbstractAnimal> findDuplicate()  {
-        List<AbstractAnimal> animalList = new ArrayList<>();
-        Set<AbstractAnimal> animalSet = new HashSet<>();
-        animalSet.addAll(List.of(animals));
-        animalList.addAll(List.of(animals));
-        for (AbstractAnimal i : animalSet){
-            animalList.remove(i);
+    public Map<String, Integer> findDuplicate()  {
+        Map<String, Integer> stringIntegerMap = new HashMap<>();
+        Set<AbstractAnimal> abstractAnimalSet = new HashSet<>();
+        for(Map.Entry<String, List<AbstractAnimal>> entry: CreateAnimalServiceImpl.getAnimalMap().entrySet()){
+            abstractAnimalSet.addAll(entry.getValue());
+            List<AbstractAnimal> listTypeAnimal = new ArrayList<>(entry.getValue());
+            for(AbstractAnimal animal : abstractAnimalSet){
+                listTypeAnimal.remove(animal);
+            }
+            if(listTypeAnimal.size() != 0) {
+                stringIntegerMap.put(entry.getKey(), listTypeAnimal.size());
+            }
         }
-        animalSet.clear();
-        animalSet.addAll(animalList);
-        animalList.clear();
-        animalList.addAll(animalSet);
-        System.out.println(animalList);
-        return animalList;
+        return stringIntegerMap;
     }
     public void printDuplicate(){
-        List<AbstractAnimal> list = findDuplicate();
-        for(AbstractAnimal animal:list){
-            System.out.println(animal);
+        Map<String,Integer> stringIntegerMap = findDuplicate();
+        for(Map.Entry<String,Integer> entry: stringIntegerMap.entrySet()){
+            System.out.println(entry.getValue() + " = " + entry.getValue());
         }
     }
 }
