@@ -1,6 +1,6 @@
 # Default ignored files
 /shelf/
-/.idea/workspace.xml
+/application/.idea/workspace.xml
 # Editor-based HTTP Client requests
 /httpRequests/
 # Datasource local storage ignored files
@@ -13,3 +13,6 @@ gradlew
 gradlew.bat
 out/
 settings.gradle
+animal-starter/.gradle
+animal-starter/build
+gradle

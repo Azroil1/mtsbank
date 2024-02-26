@@ -1,34 +1,51 @@
 package ru.mtsbank.hw.animalsrepository;
 
+
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Repository;
 import ru.mtsbank.hw.animal.AbstractAnimal;
+import ru.mtsbank.hw.animalservice.CreateAnimalService;
 import ru.mtsbank.hw.animalservice.CreateAnimalServiceImpl;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Repository
 public class AnimalRepositoryImpl implements AnimalRepository {
 
     private AbstractAnimal[] animals;
 
-    @Autowired
-    CreateAnimalServiceImpl createAnimalService;
+    public AbstractAnimal[] getAnimals() {
+        return animals;
+    }
 
-    @PostConstruct
-    public void initAnimals(int number){
-        animals = createAnimalService.createAnimal(number);
+    public void setAnimals(AbstractAnimal[] animals) {
+        this.animals = animals;
+    }
+
+    private CreateAnimalService createAnimalService;
+
+    @Autowired
+    public AnimalRepositoryImpl(CreateAnimalService createAnimalService) {
+        this.createAnimalService = createAnimalService;
+        animals = new AbstractAnimal[7];
+        for (int i = 0; i < 7; i++) {
+            animals[i] = createAnimalService.createAnimal();
+        }
     }
 
     @Override
-    public AbstractAnimal[] findLeapYearNames(AbstractAnimal[] animals) {
+    public AbstractAnimal[] findLeapYearNames() {
         List<AbstractAnimal> list = new ArrayList<>();
-        for(int i = 0; i < animals.length; i++){
-            if(animals[i].getBirthDate() != null) {
-                if (animals[i].getBirthDate().isLeapYear()) {
-                    list.add(animals[i]);
+        for (AbstractAnimal animal : animals) {
+            if (animal.getBirthDate() != null) {
+                if (animal.getBirthDate().isLeapYear()) {
+                    list.add(animal);
                 }
             }
         }
@@ -37,7 +54,7 @@ public class AnimalRepositoryImpl implements AnimalRepository {
     }
 
     @Override
-    public AbstractAnimal[] findOlderAnimal(AbstractAnimal[] animals, int N) {
+    public AbstractAnimal[] findOlderAnimal(int N) {
         List<AbstractAnimal> list = new ArrayList<>();
         for(int i = 0; i < animals.length; i++){
             if(animals[i].getBirthDate() != null) {
@@ -51,7 +68,7 @@ public class AnimalRepositoryImpl implements AnimalRepository {
     }
 
     @Override
-    public List<AbstractAnimal> findDuplicate(AbstractAnimal[] animals)  {
+    public List<AbstractAnimal> findDuplicate()  {
         List<AbstractAnimal> animalList = new ArrayList<>();
         Set<AbstractAnimal> animalSet = new HashSet<>();
         animalSet.addAll(List.of(animals));
@@ -67,7 +84,7 @@ public class AnimalRepositoryImpl implements AnimalRepository {
         return animalList;
     }
     public void printDuplicate(){
-        List<AbstractAnimal> list = findDuplicate(animals);
+        List<AbstractAnimal> list = findDuplicate();
         for(AbstractAnimal animal:list){
             System.out.println(animal);
         }

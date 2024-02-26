@@ -9,14 +9,16 @@ public interface AnimalRepository {
      * Метод находит всех животных которые родились в високосный год
      * */
 
-    AbstractAnimal[] findLeapYearNames(AbstractAnimal[] animals);
+    AbstractAnimal[] findLeapYearNames();
 
     /**
      * Метод находит всех животных старших N лет
      * */
-    AbstractAnimal[] findOlderAnimal(AbstractAnimal[] animals, int N);
+    AbstractAnimal[] findOlderAnimal(int N);
     /**
      * Вывод дупликатов животных
      * */
-    List<AbstractAnimal> findDuplicate(AbstractAnimal[] animals) throws CloneNotSupportedException;
+    List<AbstractAnimal> findDuplicate() throws CloneNotSupportedException;
+
+    void printDuplicate();
 }

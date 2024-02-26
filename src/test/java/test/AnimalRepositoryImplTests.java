@@ -4,63 +4,108 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import ru.mtsbank.hw.animal.AbstractAnimal;
+import ru.mtsbank.hw.animal.fish.models.Barbus;
+import ru.mtsbank.hw.animal.herbivores.models.Cow;
+import ru.mtsbank.hw.animal.pet.models.Cat;
+import ru.mtsbank.hw.animal.pet.models.Dog;
 import ru.mtsbank.hw.animalservice.CreateAnimalService;
-import ru.mtsbank.hw.animalservice.CreateAnimalServiceImpl;
-import ru.mtsbank.hw.animalsrepository.AnimalRepository;
 import ru.mtsbank.hw.animalsrepository.AnimalRepositoryImpl;
+import ru.mtsbank.hw.config.AnimalProperties;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
+import static org.mockito.Mockito.when;
 
 public class AnimalRepositoryImplTests {
     @Mock
-    public static AbstractAnimal[] animals;
-    @Mock
-    public static CreateAnimalService createAnimalService;
-    @Mock
-    public static AnimalRepository animalRepository;
+    private CreateAnimalService createAnimalService;
 
-    @BeforeAll
-    public static void initAnimal(){
-        createAnimalService = new CreateAnimalServiceImpl();
-        animalRepository = new AnimalRepositoryImpl();
-        animals = createAnimalService.checkTypeAnimal(5);
-        animals[0].setBirthDate(LocalDate.of(2015,4,20));
-        animals[1].setBirthDate(LocalDate.of(2017,10,23));
-        animals[2].setBirthDate(LocalDate.of(2016,11,13));
-        animals[3].setBirthDate(LocalDate.of(2013,5,16));
-        animals[4].setBirthDate(LocalDate.of(2016,1,19));
+    @Mock
+    private AnimalProperties animalProperties;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
     }
-
 
     @Test
     @DisplayName("Тест метода findLeapYears()")
-    public void findLeapYearsTest(){
-        initAnimal();
-        AbstractAnimal[] actual1 = new AbstractAnimal[] {animals[2],animals[4]};
-        System.out.println(animalRepository.findLeapYearNames(animals));
-        Assertions.assertArrayEquals(animalRepository.findLeapYearNames(animals),actual1);
+    public void findLeapYearsTest() {
+        AnimalRepositoryImpl animalRepository = new AnimalRepositoryImpl(createAnimalService);
+        AbstractAnimal[] animals = {
+                new Dog("fe", "ed", new BigDecimal(213.3), "fdf"),
+                new Cat("fe", "ed", new BigDecimal(213.3), "fdf"),
+                new Barbus("fe", "ed", new BigDecimal(213.3), "fdf"),
+                new Cow("fe", "ed", new BigDecimal(213.3), "fdf"),
+                new Dog("fe", "ed", new BigDecimal(213.3), "fdf"),
+        };
+        animals[0].setBirthDate(LocalDate.of(2015,4,20));
+        animals[1].setBirthDate(LocalDate.of(2017,10,23));
+        animals[2].setBirthDate(LocalDate.of(2010,11,13));
+        animals[3].setBirthDate(LocalDate.of(2013,5,16));
+        animals[4].setBirthDate(LocalDate.of(2016,1,19));
+        animalRepository.setAnimals(animals);
+
+        // Ожидаемые результаты для метода findLeapYearNames()
+        AbstractAnimal[] expected = {animals[4]};
+        System.out.println(Arrays.toString(animalRepository.findLeapYearNames()));
+
+        Assertions.assertArrayEquals(animalRepository.findLeapYearNames(), expected);
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {7,11})
+    @ValueSource(ints = {7, 11})
     @DisplayName("Тест метода findOlderAnimal")
-    public void findOlderAnimalTest(int values){
-        initAnimal();
+    public void findOlderAnimalTest(int values) {
+        AnimalRepositoryImpl animalRepository = new AnimalRepositoryImpl(createAnimalService);
+        AbstractAnimal[] animals = {
+                new Dog("fe", "ed", new BigDecimal(213.3), "fdf"),
+                new Cat("fe", "ed", new BigDecimal(213.3), "fdf"),
+                new Barbus("fe", "ed", new BigDecimal(213.3), "fdf"),
+                new Cat("fe", "ed", new BigDecimal(213.3), "fdf"),
+                new Dog("fe", "ed", new BigDecimal(213.3), "fdf"),
+        };
+        animals[0].setBirthDate(LocalDate.of(2015,4,20));
+        animals[1].setBirthDate(LocalDate.of(2013,5,16));
+        animals[2].setBirthDate(LocalDate.of(2016,11,13));
+        animals[3].setBirthDate(LocalDate.of(2013,5,16));
+        animals[4].setBirthDate(LocalDate.of(2016,1,19));
+        animalRepository.setAnimals(animals);
 
+        // Ожидаемый результат для метода findOlderAnimal()
         if (values == 7) {
-            Assertions.assertArrayEquals(animalRepository.findOlderAnimal(animals, values), new AbstractAnimal[] {animals[1]});
+            Assertions.assertArrayEquals(animalRepository.findOlderAnimal(values), new AbstractAnimal[] {animals[1]});
         } else {
-            Assertions.assertArrayEquals(animalRepository.findOlderAnimal(animals, values), animals);
+            System.out.println(Arrays.toString(animalRepository.findOlderAnimal(values)));
+            Assertions.assertArrayEquals(animalRepository.findOlderAnimal(values), animals);
         }
     }
 
     @Test
     @DisplayName("Тест метода findDuplicate")
-    public void findDuplicate() throws CloneNotSupportedException {
-        initAnimal();
-        Assertions.assertArrayEquals(animalRepository.findDuplicate((new AbstractAnimal[]{animals[1], animals[1],animals[1],animals[2],animals[2]})).toArray(),
-                new AbstractAnimal[] {animals[1],animals[2]});
+    public void findDuplicate() {
+        AnimalRepositoryImpl animalRepository = new AnimalRepositoryImpl(createAnimalService);
+        AbstractAnimal[] animals = {
+                new Dog("fe", "ed", new BigDecimal(213.3), "fdf"),
+                new Cat("fe", "ed", new BigDecimal(213.3), "fdf"),
+                new Barbus("fe", "ed", new BigDecimal(213.3), "fdf"),
+                new Cow("fe", "ed", new BigDecimal(213.3), "fdf"),
+                new Dog("fe", "ed", new BigDecimal(213.3), "fdf"),
+        };
+        animals[0].setBirthDate(LocalDate.of(2015,4,20));
+        animals[1].setBirthDate(LocalDate.of(2017,10,23));
+        animals[2].setBirthDate(LocalDate.of(2016,11,13));
+        animals[3].setBirthDate(LocalDate.of(2013,5,16));
+        animals[4].setBirthDate(LocalDate.of(2016,1,19));
+        animalRepository.setAnimals(animals);
+
+        List<AbstractAnimal> expected = Arrays.asList(animals[3]);
+        System.out.println(animalRepository.findDuplicate());
+        Assertions.assertEquals(expected, animalRepository.findDuplicate());
     }
 }

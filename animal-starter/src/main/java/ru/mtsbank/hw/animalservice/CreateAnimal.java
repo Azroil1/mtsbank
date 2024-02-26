@@ -1,6 +1,5 @@
 package ru.mtsbank.hw.animalservice;
 
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.mtsbank.hw.animal.AbstractAnimal;
 import ru.mtsbank.hw.animal.fish.models.Barbus;
