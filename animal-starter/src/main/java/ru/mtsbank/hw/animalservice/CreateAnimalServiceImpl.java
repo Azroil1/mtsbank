@@ -7,6 +7,7 @@ import ru.mtsbank.hw.animal.fish.Fish;
 import ru.mtsbank.hw.animal.herbivores.Herbivores;
 import ru.mtsbank.hw.animal.pet.Pet;
 import ru.mtsbank.hw.config.AnimalProperties;
+import ru.mtsbank.hw.animalservice.AnimalTypes;
 
 import java.util.*;
 
@@ -15,7 +16,7 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
 
     private Map<String,List<AbstractAnimal>> animalMap;
 
-    protected AnimalTypes types;
+    private AnimalTypes types;
 
     @Autowired
     CreateAnimal createAnimal;
@@ -36,12 +37,16 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
             abstractAnimals = createAnimal.create(types);
             if(abstractAnimals instanceof Fish){
                 abstractAnimals.setName(properties.getFishNames());
+                abstractAnimals.setAnimalTypes(AnimalTypes.GOLDFISH);
             } else if (abstractAnimals instanceof Herbivores) {
                 abstractAnimals.setName(properties.getHerbivoresNames());
+                abstractAnimals.setAnimalTypes(AnimalTypes.COW);
             } else if (abstractAnimals instanceof Pet) {
                 abstractAnimals.setName(properties.getPetNames());
+                abstractAnimals.setAnimalTypes(AnimalTypes.CAT);
             } else {
                 abstractAnimals.setName(properties.getPredatorNames());
+                abstractAnimals.setAnimalTypes(AnimalTypes.WOLF);
             }
         if(animalMap.containsKey(types.toString())){
             animalMap.get(types.toString()).add(abstractAnimals);

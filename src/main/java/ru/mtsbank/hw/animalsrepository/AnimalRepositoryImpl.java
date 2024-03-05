@@ -4,13 +4,13 @@ package ru.mtsbank.hw.animalsrepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.mtsbank.hw.animal.AbstractAnimal;
-import ru.mtsbank.hw.animalservice.CreateAnimalService;
 import ru.mtsbank.hw.animalservice.CreateAnimalServiceImpl;
+
 
 import java.time.LocalDate;
 import java.util.*;
-
-import static java.lang.Integer.compare;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Repository
 public class AnimalRepositoryImpl implements AnimalRepository {
@@ -29,64 +29,83 @@ public class AnimalRepositoryImpl implements AnimalRepository {
 
     @Override
     public Map<String,LocalDate> findLeapYearNames() {
-        Map<String,LocalDate> mapFindLeapYearNames = new HashMap<>();
-        for (Map.Entry<String, List<AbstractAnimal>> entry : createAnimalServiceImpl.getAnimalMap().entrySet()) {
-            for(AbstractAnimal animal : entry.getValue()){
-                if(animal.getBirthDate().isLeapYear()){
-                    mapFindLeapYearNames.put(entry.getKey() + " " + animal.getName(), animal.getBirthDate());
-                }
-            }
-        }
+        Map<String,LocalDate> mapFindLeapYearNames;
+        Stream<Map.Entry<String, List<AbstractAnimal>>> stream = createAnimalServiceImpl.getAnimalMap().entrySet().stream();
+        mapFindLeapYearNames = stream.map(Map.Entry::getValue)
+                .flatMap(Collection::stream)
+                .filter(abstractAnimal -> abstractAnimal.getBirthDate().isLeapYear())
+                .collect(Collectors.toMap(abstractAnimal -> abstractAnimal.getName(), abstractAnimal -> abstractAnimal.getBirthDate()));
         return mapFindLeapYearNames;
     }
 
-    Comparator<AbstractAnimal> abstractAnimalComparator = (a1,a2) -> a1.getBirthDate().compareTo(a2.getBirthDate());
+    Comparator<AbstractAnimal> abstractAnimalComparator = Comparator.comparing(AbstractAnimal::getBirthDate);
 
     @Override
     public Map<AbstractAnimal, Integer> findOlderAnimal(int findYears) {
-        Map<AbstractAnimal, Integer> animalIntegerMap = new HashMap<>();
-        AbstractAnimal olderAnimal = null;
-        for (Map.Entry<String,List<AbstractAnimal>> entry : createAnimalServiceImpl.getAnimalMap().entrySet()) {
-            for(AbstractAnimal animal : entry.getValue()){
-                if(LocalDate.now().getYear() - animal.getBirthDate().getYear() >= findYears){
-                    animalIntegerMap.put(animal, LocalDate.now().getYear() - animal.getBirthDate().getYear());
-                }
-                if (olderAnimal != null) {
-                    if(abstractAnimalComparator.compare(olderAnimal,animal) > 0) {
-                        olderAnimal = animal;
-                    }
-                } else {
-                    olderAnimal = animal;
-                }
+        Map<AbstractAnimal, Integer> animalIntegerMap;
+        Stream<Map.Entry<String, List<AbstractAnimal>>> stream = createAnimalServiceImpl.getAnimalMap().entrySet().stream();
+        animalIntegerMap = stream.map(Map.Entry::getValue)
+                .flatMap(Collection::stream)
+                .filter(abstractAnimal -> abstractAnimal.getBirthDate().getYear() >= findYears)
+                .collect(Collectors.toMap(AbstractAnimal -> AbstractAnimal, AbstractAnimal -> AbstractAnimal.getBirthDate().getYear() ));
+        if (animalIntegerMap.isEmpty()){
+            Optional<AbstractAnimal> stream1 = createAnimalServiceImpl.getAnimalMap().values().stream()
+                    .flatMap(Collection::stream)
+                    .max(abstractAnimalComparator);
+            if(stream1.isPresent()) {
+                animalIntegerMap.put(stream1.get(), stream1.get().getBirthDate().getYear());
             }
-        }
-        if(animalIntegerMap.isEmpty()){
-            animalIntegerMap.put(olderAnimal, LocalDate.now().getYear() - olderAnimal.getBirthDate().getYear());
         }
 
         return animalIntegerMap;
     }
 
     @Override
-    public Map<String, Integer> findDuplicate()  {
-        Map<String, Integer> stringIntegerMap = new HashMap<>();
-        Set<AbstractAnimal> abstractAnimalSet = new HashSet<>();
-        for(Map.Entry<String, List<AbstractAnimal>> entry: createAnimalServiceImpl.getAnimalMap().entrySet()){
-            abstractAnimalSet.addAll(entry.getValue());
-            List<AbstractAnimal> listTypeAnimal = new ArrayList<>(entry.getValue());
-            for(AbstractAnimal animal : abstractAnimalSet){
-                listTypeAnimal.remove(animal);
-            }
-            if(listTypeAnimal.size() != 0) {
-                stringIntegerMap.put(entry.getKey(), listTypeAnimal.size());
-            }
-        }
-        return stringIntegerMap;
+    public Map<String, List<AbstractAnimal>> findDuplicate()  {
+        Set<AbstractAnimal> abstractAnimalSet= new HashSet<>();
+        return createAnimalServiceImpl.getAnimalMap().values().stream()
+                .flatMap(Collection::stream)
+                .filter(AbstractAnimal -> !abstractAnimalSet.add(AbstractAnimal))
+                .collect(Collectors.groupingBy(abstractAnimal -> abstractAnimal.getAnimalTypes().toString()));
     }
     public void printDuplicate(){
-        Map<String,Integer> stringIntegerMap = findDuplicate();
-        for(Map.Entry<String,Integer> entry: stringIntegerMap.entrySet()){
-            System.out.println(entry.getValue() + " = " + entry.getValue());
-        }
+        Stream<AbstractAnimal> stream = findDuplicate().values().stream()
+                .flatMap(Collection::stream);
+        stream.forEach(System.out::println);
     }
+
+    @Override
+    public double findAverageAge(List<AbstractAnimal> animals) {
+        return animals.stream()
+                .mapToInt(AbstractAnimal -> LocalDate.now().getYear() - AbstractAnimal.getBirthDate().getYear())
+                .average()
+                .orElseThrow(() -> new RuntimeException("Не удалось подсчиттаь возраст"));
+    }
+
+    @Override
+    public List<AbstractAnimal> findOldExpensive(List<AbstractAnimal> animals) {
+        OptionalDouble doubleStream = animals.stream()
+                .filter(AbstractAnimal -> AbstractAnimal.getCost() != null)
+                .mapToDouble(AbstractAnimal -> AbstractAnimal.getCost().doubleValue())
+                .average();
+         return animals.stream()
+                .filter(AbstractAnimal -> AbstractAnimal.getCost() != null)
+                .filter(AbstractAnimal -> AbstractAnimal.getCost().doubleValue() > doubleStream.getAsDouble())
+                .filter(AbstractAnimal -> LocalDate.now().getYear() - AbstractAnimal.getBirthDate().getYear() > 5)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AbstractAnimal> findMinCostAnimals(List<AbstractAnimal> animals) {
+        return animals.stream()
+                .filter(AbstractAnimal -> AbstractAnimal.getCost() != null)
+                .sorted()
+                .limit(3)
+                .collect(Collectors.toList());
+    }
+
+    public CreateAnimalServiceImpl getCreateAnimalServiceImpl() {
+        return createAnimalServiceImpl;
+    }
+
 }
