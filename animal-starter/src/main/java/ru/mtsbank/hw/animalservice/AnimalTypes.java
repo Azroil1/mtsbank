@@ -15,7 +15,4 @@ public enum AnimalTypes {
     SHARK,
     WOLF,
     ;
-
-    AnimalTypes() {
-    }
 }

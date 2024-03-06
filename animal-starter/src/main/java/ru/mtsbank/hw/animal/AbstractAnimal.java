@@ -19,7 +19,7 @@ public abstract class AbstractAnimal implements Animal {
     protected BigDecimal cost;
     protected String character;
     protected LocalDate birthDate;
-    private AnimalTypes animalTypes;
+    private String animalType;
 
     public AbstractAnimal(String breed, String name, BigDecimal cost, String character) {
         this.breed = breed;
@@ -69,10 +69,6 @@ public abstract class AbstractAnimal implements Animal {
         return birthDate;
     }
 
-    public AnimalTypes getAnimalTypes() {
-        return animalTypes;
-    }
-
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
@@ -93,8 +89,12 @@ public abstract class AbstractAnimal implements Animal {
         this.character = character;
     }
 
-    public void setAnimalTypes(AnimalTypes animalTypes) {
-        this.animalTypes = animalTypes;
+    public String getAnimalType() {
+        return animalType;
+    }
+
+    public void setAnimalType(String animalType) {
+        this.animalType = animalType;
     }
 
     @Override

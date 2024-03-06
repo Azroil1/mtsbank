@@ -16,7 +16,7 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
 
     private Map<String,List<AbstractAnimal>> animalMap;
 
-    private AnimalTypes types;
+    AnimalTypes types;
 
     @Autowired
     CreateAnimal createAnimal;
@@ -37,16 +37,17 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
             abstractAnimals = createAnimal.create(types);
             if(abstractAnimals instanceof Fish){
                 abstractAnimals.setName(properties.getFishNames());
-                abstractAnimals.setAnimalTypes(AnimalTypes.GOLDFISH);
+                abstractAnimals.setAnimalType(AnimalTypes.GOLDFISH.toString());
+
             } else if (abstractAnimals instanceof Herbivores) {
                 abstractAnimals.setName(properties.getHerbivoresNames());
-                abstractAnimals.setAnimalTypes(AnimalTypes.COW);
+                abstractAnimals.setAnimalType(AnimalTypes.COW.toString());
             } else if (abstractAnimals instanceof Pet) {
                 abstractAnimals.setName(properties.getPetNames());
-                abstractAnimals.setAnimalTypes(AnimalTypes.CAT);
+                abstractAnimals.setAnimalType(AnimalTypes.CAT.toString());
             } else {
                 abstractAnimals.setName(properties.getPredatorNames());
-                abstractAnimals.setAnimalTypes(AnimalTypes.WOLF);
+                abstractAnimals.setAnimalType(AnimalTypes.WOLF.toString());
             }
         if(animalMap.containsKey(types.toString())){
             animalMap.get(types.toString()).add(abstractAnimals);

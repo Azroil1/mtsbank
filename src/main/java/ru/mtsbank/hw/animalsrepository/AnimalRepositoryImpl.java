@@ -66,12 +66,11 @@ public class AnimalRepositoryImpl implements AnimalRepository {
         return createAnimalServiceImpl.getAnimalMap().values().stream()
                 .flatMap(Collection::stream)
                 .filter(AbstractAnimal -> !abstractAnimalSet.add(AbstractAnimal))
-                .collect(Collectors.groupingBy(abstractAnimal -> abstractAnimal.getAnimalTypes().toString()));
+                .collect(Collectors.groupingBy(AbstractAnimal::getAnimalType));
     }
     public void printDuplicate(){
-        Stream<AbstractAnimal> stream = findDuplicate().values().stream()
-                .flatMap(Collection::stream);
-        stream.forEach(System.out::println);
+        findDuplicate().values()
+                .forEach(System.out::println);
     }
 
     @Override
@@ -102,10 +101,6 @@ public class AnimalRepositoryImpl implements AnimalRepository {
                 .sorted()
                 .limit(3)
                 .collect(Collectors.toList());
-    }
-
-    public CreateAnimalServiceImpl getCreateAnimalServiceImpl() {
-        return createAnimalServiceImpl;
     }
 
 }
