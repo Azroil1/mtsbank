@@ -2,6 +2,7 @@ package ru.mtsbank.hw.animal;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+import ru.mtsbank.hw.animalservice.AnimalTypes;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -18,6 +19,7 @@ public abstract class AbstractAnimal implements Animal {
     protected BigDecimal cost;
     protected String character;
     protected LocalDate birthDate;
+    private String animalType;
 
     public AbstractAnimal(String breed, String name, BigDecimal cost, String character) {
         this.breed = breed;
@@ -85,6 +87,14 @@ public abstract class AbstractAnimal implements Animal {
 
     public void setCharacter(String character) {
         this.character = character;
+    }
+
+    public String getAnimalType() {
+        return animalType;
+    }
+
+    public void setAnimalType(String animalType) {
+        this.animalType = animalType;
     }
 
     @Override

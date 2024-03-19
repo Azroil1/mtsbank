@@ -2,6 +2,7 @@ package ru.mtsbank.hw.animalservice;
 
 import org.springframework.stereotype.Component;
 
+
 public enum AnimalTypes {
     BARBUS,
     GOLDFISH,
@@ -13,4 +14,5 @@ public enum AnimalTypes {
     LION,
     SHARK,
     WOLF,
+    ;
 }
