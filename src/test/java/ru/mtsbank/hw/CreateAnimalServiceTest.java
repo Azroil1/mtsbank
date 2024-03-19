@@ -24,8 +24,9 @@ public class CreateAnimalServiceTest {
     @Test
     public void testAnimalName(){
         createAnimalService.setTypes(AnimalTypes.BARBUS);
-        animalProperties.setFishNames(new String[] {"Fish12"});
-        Assertions.assertEquals(createAnimalService.createAnimal().getName(),"Fish12");
+        animalProperties.setFishNames(new String[] {"guppi"});
+        System.out.println(createAnimalService.getAnimalMap());
+        Assertions.assertEquals(createAnimalService.createAnimal().get("BARBUS").get(0).getName(),"guppi");
     }
 
     @Test

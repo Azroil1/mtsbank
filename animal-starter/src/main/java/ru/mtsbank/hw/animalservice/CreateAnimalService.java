@@ -2,11 +2,13 @@ package ru.mtsbank.hw.animalservice;
 
 import ru.mtsbank.hw.animal.AbstractAnimal;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public interface CreateAnimalService {
 
-    AbstractAnimal createAnimal();
+    Map<String, List<AbstractAnimal>> createAnimal();
 
     /**
      * Метод который проверяет
