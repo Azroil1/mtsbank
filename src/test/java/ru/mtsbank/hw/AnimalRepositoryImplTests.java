@@ -1,6 +1,9 @@
 package ru.mtsbank.hw;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
@@ -11,13 +14,16 @@ import ru.mtsbank.hw.animal.AbstractAnimal;
 import ru.mtsbank.hw.animal.pet.models.Cat;
 import ru.mtsbank.hw.animal.pet.models.Dog;
 import ru.mtsbank.hw.animal.predator.models.Wolf;
-import ru.mtsbank.hw.animalservice.CreateAnimalService;
 import ru.mtsbank.hw.animalservice.CreateAnimalServiceImpl;
 import ru.mtsbank.hw.animalsrepository.AnimalRepositoryImpl;
+import ru.mtsbank.hw.exceptions.SizeAnimalListException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.mockito.Mockito.when;
 
@@ -102,4 +108,20 @@ public class AnimalRepositoryImplTests {
         List<AbstractAnimal> expectedList = new ArrayList<>();
         Assertions.assertEquals(expectedList, animalRepository.findOldExpensive(abstractAnimalList));
     }
+
+    @Test
+    @DisplayName("Тест метода findOlderAnimal на исключения ")
+    public void finOlderAnimal(){
+        Assertions.assertThrows(IllegalArgumentException.class, () -> animalRepository.findOlderAnimal(-10));
+    }
+    @Test
+    @DisplayName("Ппк")
+    public void findMinCostAnimal() throws SizeAnimalListException {
+        Map<String,List<AbstractAnimal>> map = new HashMap<>();
+        map.put("LION", new ArrayList<>());
+        when(createAnimalService.getAnimalMap()).thenReturn(map);
+        Assertions.assertThrows(SizeAnimalListException.class, () -> animalRepository.findMinCostAnimals());
+    }
+
+
 }
