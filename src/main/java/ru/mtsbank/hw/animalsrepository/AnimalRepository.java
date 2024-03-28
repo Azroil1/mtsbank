@@ -1,6 +1,7 @@
 package ru.mtsbank.hw.animalsrepository;
 
 import ru.mtsbank.hw.animal.AbstractAnimal;
+import ru.mtsbank.hw.exceptions.SizeAnimalListException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -39,8 +40,6 @@ public interface AnimalRepository {
 
     /**
      * Поиск 3 животных с самой низкой ценой
-     * @param animals
-     * @return
      */
-    List<AbstractAnimal> findMinCostAnimals(List<AbstractAnimal> animals);
+    List<AbstractAnimal> findMinCostAnimals() throws SizeAnimalListException;
 }
