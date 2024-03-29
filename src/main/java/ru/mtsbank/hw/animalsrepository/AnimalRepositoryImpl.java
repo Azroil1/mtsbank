@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.mtsbank.hw.animal.AbstractAnimal;
 import ru.mtsbank.hw.animalservice.CreateAnimalServiceImpl;
+import ru.mtsbank.hw.exceptions.EmptyListException;
+import ru.mtsbank.hw.exceptions.NonValidArgumentException;
 import ru.mtsbank.hw.exceptions.SizeAnimalListException;
 
 
@@ -47,7 +49,7 @@ public class AnimalRepositoryImpl implements AnimalRepository {
     @Override
     public Map<AbstractAnimal, Integer> findOlderAnimal(int findYears) throws IllegalArgumentException {
         if(findYears < 0){
-            throw new IllegalArgumentException();
+            throw new NonValidArgumentException("возраст не может быть меньше 0");
         }
         Objects.requireNonNull(createAnimalServiceImpl.getAnimalMap());
         Map<AbstractAnimal, Integer> animalIntegerMap;
@@ -84,9 +86,9 @@ public class AnimalRepositoryImpl implements AnimalRepository {
     }
 
     @Override
-    public double findAverageAge(List<AbstractAnimal> animals) throws NullPointerException {
-        if(animals == null){
-            throw new NullPointerException();
+    public double findAverageAge(List<AbstractAnimal> animals) throws EmptyListException {
+        if(animals.isEmpty()){
+            throw new EmptyListException("пустой лист");
         }
         return animals.stream()
                 .mapToInt(AbstractAnimal -> LocalDate.now().getYear() - AbstractAnimal.getBirthDate().getYear())
@@ -95,8 +97,10 @@ public class AnimalRepositoryImpl implements AnimalRepository {
     }
 
     @Override
-    public List<AbstractAnimal> findOldExpensive(List<AbstractAnimal> animals) throws NullPointerException {
-        Objects.requireNonNull(animals);
+    public List<AbstractAnimal> findOldExpensive(List<AbstractAnimal> animals) throws EmptyListException {
+        if(animals.isEmpty()){
+            throw new EmptyListException("пустой лист");
+        }
         OptionalDouble doubleStream = animals.stream()
                 .filter(Objects::nonNull)
                 .filter(AbstractAnimal -> AbstractAnimal.getCost() != null)

@@ -16,6 +16,8 @@ import ru.mtsbank.hw.animal.pet.models.Dog;
 import ru.mtsbank.hw.animal.predator.models.Wolf;
 import ru.mtsbank.hw.animalservice.CreateAnimalServiceImpl;
 import ru.mtsbank.hw.animalsrepository.AnimalRepositoryImpl;
+import ru.mtsbank.hw.exceptions.EmptyListException;
+import ru.mtsbank.hw.exceptions.NonValidArgumentException;
 import ru.mtsbank.hw.exceptions.SizeAnimalListException;
 
 import java.math.BigDecimal;
@@ -110,12 +112,19 @@ public class AnimalRepositoryImplTests {
     }
 
     @Test
+    @DisplayName("Тест метода findAverageAge на иключения")
+    public void finAverageAge(){
+        List<AbstractAnimal> abstractAnimalList= new ArrayList<>();
+        Assertions.assertThrows(EmptyListException.class, () -> animalRepository.findAverageAge(abstractAnimalList));
+    }
+
+    @Test
     @DisplayName("Тест метода findOlderAnimal на исключения ")
     public void finOlderAnimal(){
-        Assertions.assertThrows(IllegalArgumentException.class, () -> animalRepository.findOlderAnimal(-10));
+        Assertions.assertThrows(NonValidArgumentException.class, () -> animalRepository.findOlderAnimal(-10));
     }
     @Test
-    @DisplayName("Ппк")
+    @DisplayName("Тест метода findMinCostAnimal на исключение")
     public void findMinCostAnimal() throws SizeAnimalListException {
         Map<String,List<AbstractAnimal>> map = new HashMap<>();
         map.put("LION", new ArrayList<>());
