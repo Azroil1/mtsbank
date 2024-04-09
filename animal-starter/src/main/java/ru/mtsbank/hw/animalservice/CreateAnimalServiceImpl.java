@@ -9,6 +9,7 @@ import ru.mtsbank.hw.animal.pet.Pet;
 import ru.mtsbank.hw.config.AnimalProperties;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class CreateAnimalServiceImpl implements CreateAnimalService {
@@ -24,7 +25,7 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
 
     public CreateAnimalServiceImpl(AnimalProperties properties) {
         this.properties = properties;
-        animalMap = new HashMap<>();
+        animalMap = new ConcurrentHashMap<>();
     }
 
     @Override
