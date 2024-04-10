@@ -9,7 +9,6 @@ import ru.mtsbank.hw.exceptions.EmptyListException;
 import ru.mtsbank.hw.exceptions.NonValidArgumentException;
 import ru.mtsbank.hw.exceptions.SizeAnimalListException;
 
-
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -87,12 +86,15 @@ public class AnimalRepositoryImpl implements AnimalRepository {
     }
 
     @Override
-    public double findAverageAge(List<AbstractAnimal> animals) throws EmptyListException {
+    public double findAverageAge() throws EmptyListException {
+        List<List<AbstractAnimal>> animals = new ArrayList<>( createAnimalServiceImpl
+                .getAnimalMap().values());
         if(animals.isEmpty()){
             throw new EmptyListException("пустой лист");
         }
         return animals.stream()
-                .mapToInt(AbstractAnimal -> LocalDate.now().getYear() - AbstractAnimal.getBirthDate().getYear())
+                .flatMap(Collection::stream)
+                .mapToDouble(AbstractAnimal -> LocalDate.now().getYear() - AbstractAnimal.getBirthDate().getYear())
                 .average()
                 .orElseThrow(() -> new RuntimeException("Не удалось подсчиттаь возраст"));
     }
