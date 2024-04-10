@@ -7,16 +7,15 @@ import ru.mtsbank.hw.animal.fish.Fish;
 import ru.mtsbank.hw.animal.herbivores.Herbivores;
 import ru.mtsbank.hw.animal.pet.Pet;
 import ru.mtsbank.hw.config.AnimalProperties;
-import ru.mtsbank.hw.animalservice.AnimalTypes;
 
 import java.util.*;
 
 @Component
 public class CreateAnimalServiceImpl implements CreateAnimalService {
 
-    private Map<String,List<AbstractAnimal>> animalMap;
+    private Map<String, List<AbstractAnimal>> animalMap;
 
-    AnimalTypes types;
+    AnimalTypes type;
 
     @Autowired
     CreateAnimal createAnimal;
@@ -25,15 +24,13 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
 
     public CreateAnimalServiceImpl(AnimalProperties properties) {
         this.properties = properties;
-        if(animalMap == null){
-            animalMap = new HashMap<>();
-        }
+        animalMap = new HashMap<>();
     }
 
     @Override
     public Map<String, List<AbstractAnimal>> createAnimal() {
         AbstractAnimal abstractAnimals;
-        types = AnimalTypes.values()[new Random().nextInt(AnimalTypes.values().length)];
+        AnimalTypes types = AnimalTypes.values()[new Random().nextInt(AnimalTypes.values().length)];
             abstractAnimals = createAnimal.create(types);
             if(abstractAnimals instanceof Fish){
                 abstractAnimals.setName(properties.getFishNames());
@@ -61,11 +58,11 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
     }
 
     public AnimalTypes getTypes() {
-        return types;
+        return type;
     }
 
-    public void setTypes(AnimalTypes types) {
-        this.types = types;
+    public void setTypes(AnimalTypes type) {
+        this.type = type;
     }
 
     public Map<String, List<AbstractAnimal>> getAnimalMap() {
