@@ -8,7 +8,17 @@ import ru.mtsbank.hw.animal.herbivores.Herbivores;
 import ru.mtsbank.hw.animal.pet.Pet;
 import ru.mtsbank.hw.config.AnimalProperties;
 
-import java.util.*;
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
@@ -22,10 +32,31 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
     CreateAnimal createAnimal;
 
     AnimalProperties properties;
+    private Path path = Paths.get("C:\\Users\\Amir\\Desktop\\mts\\src\\main\\resources\\animals\\logData.txt");
+
+    static long counterAnimals;
 
     public CreateAnimalServiceImpl(AnimalProperties properties) {
         this.properties = properties;
         animalMap = new ConcurrentHashMap<>();
+    }
+
+    @PostConstruct
+    public void createNewFile(){
+        if(Files.exists(path)){
+            try {
+                Files.delete(path);
+                System.out.println("File delete");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        try {
+            Files.createFile(path);
+            System.out.println("File create");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -54,6 +85,21 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
             List<AbstractAnimal> list = new ArrayList<>();
             list.add(abstractAnimals);
             animalMap.put(types.toString(),list);
+        }
+        if(Files.exists(path)){
+            counterAnimals++;
+
+            String animalToString = counterAnimals + " " + abstractAnimals.getBreed() + " " + abstractAnimals.getName();
+            if(abstractAnimals.getCost() != null){
+                animalToString += " " + abstractAnimals.getCost().toString();
+            }
+
+            animalToString += " " + abstractAnimals.getBirthDate().toString();
+            try {
+                Files.writeString(path, animalToString + "\n", StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         return animalMap;
     }

@@ -22,7 +22,12 @@ public interface Animal {
     String getCharacter();
 
     /**
-     * Функция возвращает поля
+     * Функция возвращает поля{@link AbstractAnimal#birthDate}
      * */
     LocalDate getBirthDate();
+
+    /**
+    *Метод возвращает поле{@link AbstractAnimal#secretInformation}
+     * */
+    String getSecretInformation();
 }
