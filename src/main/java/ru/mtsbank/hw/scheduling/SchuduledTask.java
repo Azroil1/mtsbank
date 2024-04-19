@@ -5,11 +5,17 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.mtsbank.hw.animalsrepository.AnimalRepositoryImpl;
 import ru.mtsbank.hw.exceptions.SizeAnimalListException;
+import ru.mtsbank.hw.executorservice.ScheduledExecutorTask;
+
+import javax.annotation.PostConstruct;
 
 @Component
 public class SchuduledTask {
     @Autowired
     AnimalRepositoryImpl animalRepository;
+
+    @Autowired
+    private ScheduledExecutorTask scheduledExecutorTask;
 
     @Scheduled(fixedRate = 60000)
     public void getAnimalRepository(){
@@ -28,5 +34,12 @@ public class SchuduledTask {
         System.out.println("-----------------------------------------");
         System.out.println(animalRepository.findLeapYearNames());
         System.out.println("-----------------------------------------");
+        System.out.println(animalRepository.findAverageAge());
+    }
+
+    @PostConstruct
+    public void startTreads(){
+        scheduledExecutorTask.executorFindAvrAge();
+        scheduledExecutorTask.executorPrintAnimal();
     }
 }

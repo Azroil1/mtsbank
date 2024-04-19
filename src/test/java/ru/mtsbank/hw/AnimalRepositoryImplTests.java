@@ -85,6 +85,7 @@ public class AnimalRepositoryImplTests {
     @Test
     @DisplayName("Тест метода findAverageAge")
     public void findAverageAge(){
+        Map<String,List<AbstractAnimal>> map = new HashMap<>();
         List<AbstractAnimal> abstractAnimalList = new ArrayList<>();
         abstractAnimalList.add(new Dog("fe", "ed", new BigDecimal(3), "fdf"));
         abstractAnimalList.get(0).setBirthDate(LocalDate.of(2015,4,20));
@@ -94,9 +95,11 @@ public class AnimalRepositoryImplTests {
         abstractAnimalList.get(2).setBirthDate(LocalDate.of(2015,4,20));
         abstractAnimalList.add(new Wolf("ds", "ds", "df"));
         abstractAnimalList.get(3).setBirthDate(LocalDate.of(2020, 4, 20));
+        map.put("DOG", abstractAnimalList);
+        when(createAnimalService.getAnimalMap()).thenReturn(map);
 
         double expectedAverageAge = 7.5;
-        Assertions.assertEquals(expectedAverageAge, animalRepository.findAverageAge(abstractAnimalList));
+        Assertions.assertEquals(expectedAverageAge, animalRepository.findAverageAge());
     }
 
     @Test
@@ -115,7 +118,10 @@ public class AnimalRepositoryImplTests {
     @DisplayName("Тест метода findAverageAge на иключения")
     public void finAverageAge(){
         List<AbstractAnimal> abstractAnimalList= new ArrayList<>();
-        Assertions.assertThrows(EmptyListException.class, () -> animalRepository.findAverageAge(abstractAnimalList));
+        Map<String,List<AbstractAnimal>> map = new HashMap<>();
+        map.put("Dog", abstractAnimalList);
+        when(createAnimalService.getAnimalMap()).thenReturn(map);
+        Assertions.assertThrows(EmptyListException.class, () -> animalRepository.findAverageAge());
     }
 
     @Test

@@ -31,7 +31,7 @@ public interface AnimalRepository {
     /**
      * Метод поиска среднего возраста животных
      */
-    double findAverageAge(List<AbstractAnimal> animals);
+    double findAverageAge();
 
     /**
      * Поиск животных старше 5 лет и которые стоят больше средней цены
