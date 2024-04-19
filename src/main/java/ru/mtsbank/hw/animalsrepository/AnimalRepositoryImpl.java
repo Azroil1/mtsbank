@@ -12,6 +12,7 @@ import ru.mtsbank.hw.exceptions.SizeAnimalListException;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,7 +42,7 @@ public class AnimalRepositoryImpl implements AnimalRepository {
                 .filter(abstractAnimal -> abstractAnimal.getBirthDate() != null)
                 .filter(abstractAnimal -> abstractAnimal.getBirthDate().isLeapYear())
                 . collect(Collectors.toMap(AbstractAnimal::getName, AbstractAnimal::getBirthDate));
-        return mapFindLeapYearNames;
+        return new ConcurrentHashMap<>(mapFindLeapYearNames);
     }
 
     Comparator<AbstractAnimal> abstractAnimalComparator = Comparator.comparing(AbstractAnimal::getBirthDate);
@@ -68,17 +69,17 @@ public class AnimalRepositoryImpl implements AnimalRepository {
             }
         }
 
-        return animalIntegerMap;
+        return new ConcurrentHashMap<>(animalIntegerMap);
     }
 
     @Override
     public Map<String, List<AbstractAnimal>> findDuplicate()  {
         Objects.requireNonNull(createAnimalServiceImpl.getAnimalMap());
         Set<AbstractAnimal> abstractAnimalSet= new HashSet<>();
-        return createAnimalServiceImpl.getAnimalMap().values().stream()
+        return new ConcurrentHashMap<>(createAnimalServiceImpl.getAnimalMap().values().stream()
                 .flatMap(Collection::stream)
                 .filter(AbstractAnimal -> !abstractAnimalSet.add(AbstractAnimal))
-                .collect(Collectors.groupingBy(AbstractAnimal::getAnimalType));
+                .collect(Collectors.groupingBy(AbstractAnimal::getAnimalType)));
     }
     public void printDuplicate(){
         findDuplicate().values()
