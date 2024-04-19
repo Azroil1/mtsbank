@@ -8,24 +8,29 @@ import ru.mtsbank.hw.animalservice.CreateAnimalServiceImpl;
 import ru.mtsbank.hw.exceptions.EmptyListException;
 import ru.mtsbank.hw.exceptions.NonValidArgumentException;
 import ru.mtsbank.hw.exceptions.SizeAnimalListException;
+import ru.mtsbank.hw.serializers.ObjectMapperAnimalsForJSON;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Repository
 public class AnimalRepositoryImpl implements AnimalRepository {
-
-
     @Autowired
     private CreateAnimalServiceImpl createAnimalServiceImpl;
 
     @Autowired
     public AnimalRepositoryImpl(CreateAnimalServiceImpl createAnimalServiceImpl) {
         this.createAnimalServiceImpl = createAnimalServiceImpl;
-        for (int i = 0; i < 7; i++) {
+    }
+
+    @PostConstruct
+    public void createAnimal(){
+        for(int i = 0; i < 7; i++){
             createAnimalServiceImpl.createAnimal();
         }
     }
@@ -41,6 +46,8 @@ public class AnimalRepositoryImpl implements AnimalRepository {
                 .filter(abstractAnimal -> abstractAnimal.getBirthDate() != null)
                 .filter(abstractAnimal -> abstractAnimal.getBirthDate().isLeapYear())
                 . collect(Collectors.toMap(AbstractAnimal::getName, AbstractAnimal::getBirthDate));
+        ObjectMapperAnimalsForJSON.animalMapJson(mapFindLeapYearNames, "findLeapYearNames.json");
+
         return new ConcurrentHashMap<>(mapFindLeapYearNames);
     }
 
@@ -67,6 +74,7 @@ public class AnimalRepositoryImpl implements AnimalRepository {
                 animalIntegerMap.put(stream1.get(), stream1.get().getBirthDate().getYear());
             }
         }
+        ObjectMapperAnimalsForJSON.animalMapJson(animalIntegerMap, "findOlderAnimal.json");
 
         return new ConcurrentHashMap<>(animalIntegerMap);
     }
@@ -75,10 +83,12 @@ public class AnimalRepositoryImpl implements AnimalRepository {
     public Map<String, List<AbstractAnimal>> findDuplicate()  {
         Objects.requireNonNull(createAnimalServiceImpl.getAnimalMap());
         Set<AbstractAnimal> abstractAnimalSet= new HashSet<>();
-        return new ConcurrentHashMap<>(createAnimalServiceImpl.getAnimalMap().values().stream()
+        Map<String,List<AbstractAnimal>> findDuplicateMap = createAnimalServiceImpl.getAnimalMap().values().stream()
                 .flatMap(Collection::stream)
                 .filter(AbstractAnimal -> !abstractAnimalSet.add(AbstractAnimal))
-                .collect(Collectors.groupingBy(AbstractAnimal::getAnimalType)));
+                .collect(Collectors.groupingBy(AbstractAnimal::getAnimalType));
+        ObjectMapperAnimalsForJSON.animalMapJson(findDuplicateMap, "findDuplicate.json");
+        return new ConcurrentHashMap<>(findDuplicateMap);
     }
     public void printDuplicate(){
         findDuplicate().values()
@@ -94,6 +104,8 @@ public class AnimalRepositoryImpl implements AnimalRepository {
         }
         return animals.stream()
                 .flatMap(Collection::stream)
+                .filter(Objects::nonNull)
+                .filter(abstractAnimal -> abstractAnimal.getBirthDate() != null)
                 .mapToDouble(AbstractAnimal -> LocalDate.now().getYear() - AbstractAnimal.getBirthDate().getYear())
                 .average()
                 .orElseThrow(() -> new RuntimeException("Не удалось подсчиттаь возраст"));
@@ -127,13 +139,15 @@ public class AnimalRepositoryImpl implements AnimalRepository {
         if(sizeAnimals < 3){
             throw new SizeAnimalListException("Animal list size < 3");
         }
-        return animals.stream()
+        List<AbstractAnimal> abstractAnimalList = animals.stream()
                 .flatMap(Collection::stream)
                 .filter(Objects::nonNull)
                 .filter(AbstractAnimal -> AbstractAnimal.getCost() != null)
                 .sorted(Comparator.comparing(AbstractAnimal::getCost))
                 .limit(3)
                 .collect(Collectors.toList());
+        ObjectMapperAnimalsForJSON.animalCollectionJson(abstractAnimalList, "findMinCostAnimals.json");
+        return new CopyOnWriteArrayList<>(abstractAnimalList);
     }
 
 }

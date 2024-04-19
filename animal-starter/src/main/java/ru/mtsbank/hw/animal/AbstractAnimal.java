@@ -1,12 +1,22 @@
 package ru.mtsbank.hw.animal;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Base64;
+import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -15,8 +25,13 @@ public abstract class AbstractAnimal implements Animal {
     protected String name;
     protected BigDecimal cost;
     protected String character;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     protected LocalDate birthDate;
     private String animalType;
+    private String secretInformation;
+
+    public AbstractAnimal() {
+    }
 
     public AbstractAnimal(String breed, String name, BigDecimal cost, String character) {
         this.breed = breed;
@@ -24,6 +39,14 @@ public abstract class AbstractAnimal implements Animal {
         this.cost= cost.setScale(2,RoundingMode.DOWN);
         this.character = character;
         this.birthDate = randomDate();
+
+        Path path = Paths.get("C:\\Users\\Amir\\Desktop\\mts\\src\\main\\resources\\secretStore\\secretInformation.txt");
+        try {
+            List<String> allLinesSecretInfo = Files.readAllLines(path);
+            this.secretInformation = encryptingSecretInfo(allLinesSecretInfo.get(new Random().nextInt(allLinesSecretInfo.size())));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -66,6 +89,11 @@ public abstract class AbstractAnimal implements Animal {
         return birthDate;
     }
 
+    @Override
+    public String getSecretInformation() {
+        return secretInformation;
+    }
+
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
@@ -94,6 +122,16 @@ public abstract class AbstractAnimal implements Animal {
         this.animalType = animalType;
     }
 
+    public void setSecretInformation(String secretInformation) {
+        this.secretInformation = secretInformation;
+    }
+    private String encryptingSecretInfo(String data){
+        return Base64.getEncoder().encodeToString(data.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public String decryptingSecretInfo(String data){
+        return new String(Base64.getDecoder().decode(data));
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
