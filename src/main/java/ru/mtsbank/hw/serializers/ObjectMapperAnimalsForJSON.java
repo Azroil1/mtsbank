@@ -15,7 +15,7 @@ import java.util.Map;
 
 
 public class ObjectMapperAnimalsForJSON {
-    private static final String PATH = "C:\\Users\\Amir\\Desktop\\mts\\src\\main\\resources\\results\\";
+    private static final String PATH = "src/main/resources/results/";
 
     public static void animalCollectionJson(Collection<?> collection, String fileName){
         ObjectMapper objectMapper = new ObjectMapper();
