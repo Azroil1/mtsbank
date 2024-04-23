@@ -7,3 +7,7 @@ animal:
 spring:
   main:
     allow-bean-definition-overriding: true
+data-connection:
+  url: "jdbc:postgresql://localhost:5432/postgres"
+  name: "postgres"
+  password: "Gukm5998"
