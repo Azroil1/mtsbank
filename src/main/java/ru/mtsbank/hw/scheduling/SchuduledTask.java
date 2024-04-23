@@ -1,16 +1,18 @@
 package ru.mtsbank.hw.scheduling;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.mtsbank.hw.animalsrepository.AnimalRepositoryImpl;
+import ru.mtsbank.hw.database.AnimalsDataBaseJDBC;
 import ru.mtsbank.hw.exceptions.SizeAnimalListException;
 import ru.mtsbank.hw.executorservice.ScheduledExecutorTask;
+import ru.mtsbank.hw.modelsanimalsdatabase.Creature;
 import ru.mtsbank.hw.serializers.ObjectMapperAnimalsForJSON;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class SchuduledTask {
@@ -19,8 +21,10 @@ public class SchuduledTask {
 
     @Autowired
     private ScheduledExecutorTask scheduledExecutorTask;
+    @Autowired
+    private AnimalsDataBaseJDBC dataBaseJDBC;
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    private List<Creature> creatureList;
 
     @Scheduled(fixedRate = 60000)
     public void getAnimalRepository() throws SizeAnimalListException {
@@ -45,7 +49,12 @@ public class SchuduledTask {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
+        System.out.println("--------------------------");
+        System.out.println(dataBaseJDBC.getListCreature());
+        System.out.println(dataBaseJDBC.getListHabitat());
+        System.out.println(dataBaseJDBC.getListProvider());
+
+}
 
     @PostConstruct
     public void startTreads(){
