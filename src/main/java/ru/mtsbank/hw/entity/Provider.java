@@ -1,14 +1,25 @@
-package ru.mtsbank.hw.modelsanimalsdatabase;
+package ru.mtsbank.hw.entity;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "provider")
 public class Provider {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_provider;
     private String name;
+    @Column(name = "phone")
     private String phone_number;
 
     public Provider(int id_provider, String name, String phone_number) {
         this.id_provider = id_provider;
         this.name = name;
         this.phone_number = phone_number;
+    }
+
+    public Provider() {
+
     }
 
     public int getId_provider() {

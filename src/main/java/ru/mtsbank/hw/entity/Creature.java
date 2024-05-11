@@ -1,20 +1,36 @@
-package ru.mtsbank.hw.modelsanimalsdatabase;
+package ru.mtsbank.hw.entity;
 
+
+import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "creature")
 public class Creature {
+    @Id
+    @Column(name = "id_creature")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+    @Column(name = "type_id")
     private int typeId;
     private short age;
+    @Column(name = "birth_date")
     private LocalDate birthDate;
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_breed")
+    private Breed breed;
 
-    public Creature(int id, String name, int typeId, short age, LocalDate birthDate) {
-        this.id = id;
+    public Creature(String name, int typeId, short age, LocalDate birthDate, Breed breed) {
         this.name = name;
         this.typeId = typeId;
         this.age = age;
         this.birthDate = birthDate;
+        this.breed = breed;
+    }
+
+    public Creature() {
+
     }
 
     public String getName() {
@@ -57,6 +73,14 @@ public class Creature {
         this.birthDate = birthDate;
     }
 
+    public Breed getBreed() {
+        return breed;
+    }
+
+    public void setBreed(Breed breed) {
+        this.breed = breed;
+    }
+
     @Override
     public String toString() {
         return "Creature{" +
@@ -65,6 +89,7 @@ public class Creature {
                 ", typeId=" + typeId +
                 ", age=" + age +
                 ", birthDate=" + birthDate +
+                ", breed='" + breed + '\'' +
                 '}';
     }
 }

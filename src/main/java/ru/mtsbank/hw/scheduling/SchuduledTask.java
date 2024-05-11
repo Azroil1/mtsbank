@@ -3,11 +3,11 @@ package ru.mtsbank.hw.scheduling;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import ru.mtsbank.hw.animalservice.CreateAnimalServiceImpl;
 import ru.mtsbank.hw.animalsrepository.AnimalRepositoryImpl;
-import ru.mtsbank.hw.database.AnimalsDataBaseJDBC;
 import ru.mtsbank.hw.exceptions.SizeAnimalListException;
 import ru.mtsbank.hw.executorservice.ScheduledExecutorTask;
-import ru.mtsbank.hw.modelsanimalsdatabase.Creature;
+import ru.mtsbank.hw.entity.Creature;
 import ru.mtsbank.hw.serializers.ObjectMapperAnimalsForJSON;
 
 import javax.annotation.PostConstruct;
@@ -22,7 +22,7 @@ public class SchuduledTask {
     @Autowired
     private ScheduledExecutorTask scheduledExecutorTask;
     @Autowired
-    private AnimalsDataBaseJDBC dataBaseJDBC;
+    private CreateAnimalServiceImpl createAnimalService;
 
     private List<Creature> creatureList;
 
@@ -50,9 +50,8 @@ public class SchuduledTask {
             throw new RuntimeException(e);
         }
         System.out.println("--------------------------");
-        System.out.println(dataBaseJDBC.getListCreature());
-        System.out.println(dataBaseJDBC.getListHabitat());
-        System.out.println(dataBaseJDBC.getListProvider());
+        System.out.println(createAnimalService.getListCreature());
+
 
 }
 

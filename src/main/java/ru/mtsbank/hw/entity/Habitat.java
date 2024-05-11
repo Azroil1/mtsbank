@@ -1,8 +1,16 @@
-package ru.mtsbank.hw.modelsanimalsdatabase;
+package ru.mtsbank.hw.entity;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "habitat")
 public class Habitat {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_area;
     private String area;
+
+    public Habitat(){}
 
     public Habitat(String area, long id_area) {
         this.area = area;
