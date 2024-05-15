@@ -3,8 +3,8 @@ package ru.mtsbank.hw.bpp;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Configuration;
-import ru.mtsbank.hw.animalservice.AnimalTypes;
 import ru.mtsbank.hw.animalservice.CreateAnimalServiceImpl;
+import ru.mtsbank.hw.service.AnimalTypes;
 
 import java.util.Random;
 

@@ -1,6 +1,8 @@
 package ru.mtsbank.hw.animalservice;
 
 import ru.mtsbank.hw.animal.AbstractAnimal;
+import ru.mtsbank.hw.service.AnimalTypes;
+import ru.mtsbank.hw.service.CreateAnimal;
 
 import java.util.List;
 import java.util.Map;

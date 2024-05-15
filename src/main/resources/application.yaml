@@ -5,9 +5,18 @@ animal:
     petNames: pet1,pet2,pet3
     predatorNames: predator, predatorbrator
 spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=animals
+    username: postgres
+    password: Gukm5998
+    dbcp2:
+      default-schema: animals
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
   main:
     allow-bean-definition-overriding: true
-data-connection:
-  url: "jdbc:postgresql://localhost:5432/postgres"
-  name: "postgres"
-  password: "Gukm5998"
+  flyway:
+    enabled: true

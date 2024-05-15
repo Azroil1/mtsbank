@@ -1,4 +1,4 @@
-create table animals.provider(id_provider int not null, name text, phone nchar(50));
+create table animals.provider(id_provider int not null, name text, phone varchar(50));
 
 create table animals.animals_provider(id_animal_type int not null , id_provider int not null);
 

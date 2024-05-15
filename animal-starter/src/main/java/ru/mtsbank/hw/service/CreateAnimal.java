@@ -1,4 +1,4 @@
-package ru.mtsbank.hw.animalservice;
+package ru.mtsbank.hw.service;
 
 import org.springframework.stereotype.Component;
 import ru.mtsbank.hw.animal.AbstractAnimal;

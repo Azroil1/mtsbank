@@ -7,20 +7,53 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "breed")
+@Table(name = "animal_type")
 public class Breed {
     @Id
-    @Column(name = "id_breed")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_type")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_type_sequence")
+    @SequenceGenerator(name = "id_type_sequence", sequenceName = "id_type_sequence", allocationSize = 1)
     private long idBreed;
-    private String breed;
+    @Column(name = "type", columnDefinition = "VARCHAR(50)")
+    private String type;
     @OneToMany(mappedBy = "breed")
     private List<Creature> breedCreatures;
 
     public Breed() {
     }
 
-    public Breed(String breed) {
-        this.breed = breed;
+    public Breed(String type) {
+        this.type = type;
+    }
+
+    public long getIdBreed() {
+        return idBreed;
+    }
+
+    public void setIdBreed(long idBreed) {
+        this.idBreed = idBreed;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public List<Creature> getBreedCreatures() {
+        return breedCreatures;
+    }
+
+    public void setBreedCreatures(List<Creature> breedCreatures) {
+        this.breedCreatures = breedCreatures;
+    }
+
+    @Override
+    public String toString() {
+        return "Breed{" +
+                "breed='" + type + '\'' +
+                '}';
     }
 }

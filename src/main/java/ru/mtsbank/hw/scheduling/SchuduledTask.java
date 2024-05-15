@@ -5,9 +5,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.mtsbank.hw.animalservice.CreateAnimalServiceImpl;
 import ru.mtsbank.hw.animalsrepository.AnimalRepositoryImpl;
+import ru.mtsbank.hw.entity.Creature;
 import ru.mtsbank.hw.exceptions.SizeAnimalListException;
 import ru.mtsbank.hw.executorservice.ScheduledExecutorTask;
-import ru.mtsbank.hw.entity.Creature;
 import ru.mtsbank.hw.serializers.ObjectMapperAnimalsForJSON;
 
 import javax.annotation.PostConstruct;

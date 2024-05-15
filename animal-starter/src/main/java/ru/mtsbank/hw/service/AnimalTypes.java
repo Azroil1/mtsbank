@@ -1,4 +1,4 @@
-package ru.mtsbank.hw.animalservice;
+package ru.mtsbank.hw.service;
 
 public enum AnimalTypes {
     BARBUS,

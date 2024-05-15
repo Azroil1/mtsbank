@@ -1,4 +1,4 @@
-create table animals.creature(
+create table if not exists animals.creature(
                                  id_creature bigint not null ,
                                  name text not null,
                                  type_id int not null,
