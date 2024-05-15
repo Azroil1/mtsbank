@@ -9,8 +9,9 @@ import java.time.LocalDate;
 public class Creature {
     @Id
     @Column(name = "id_creature")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_creature_sequence")
+    @SequenceGenerator(name = "id_creature_sequence", sequenceName = "id_creature_sequence", allocationSize = 1)
+    private long id;
     private String name;
     @Column(name = "type_id")
     private int typeId;
@@ -18,15 +19,15 @@ public class Creature {
     @Column(name = "birth_date")
     private LocalDate birthDate;
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_breed")
+    @JoinColumn(name = "type_id", insertable = false, updatable = false)
     private Breed breed;
 
     public Creature(String name, int typeId, short age, LocalDate birthDate, Breed breed) {
+        this.breed = breed;
         this.name = name;
         this.typeId = typeId;
         this.age = age;
         this.birthDate = birthDate;
-        this.breed = breed;
     }
 
     public Creature() {
@@ -41,11 +42,11 @@ public class Creature {
         this.name = name;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -89,7 +90,7 @@ public class Creature {
                 ", typeId=" + typeId +
                 ", age=" + age +
                 ", birthDate=" + birthDate +
-                ", breed='" + breed + '\'' +
+                ", breed=" + breed +
                 '}';
     }
 }

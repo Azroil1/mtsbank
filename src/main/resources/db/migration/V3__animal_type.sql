@@ -1,6 +1,6 @@
-create table animals.animal_type(
+create table if not exists animals.animal_type(
     id_type bigint not null,
-    type nchar(50),
+    type varchar(50),
     is_wild boolean
 );
 
