@@ -1,6 +1,8 @@
 package ru.mtsbank.hw.entity;
 
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -13,19 +15,16 @@ public class Creature {
     @SequenceGenerator(name = "id_creature_sequence", sequenceName = "id_creature_sequence", allocationSize = 1)
     private long id;
     private String name;
-    @Column(name = "type_id")
-    private int typeId;
     private short age;
-    @Column(name = "birth_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "type_id", insertable = false, updatable = false)
+    @ManyToOne()
+    @JoinColumn(name = "type_id", referencedColumnName = "id_type", columnDefinition = "bigint")
     private Breed breed;
 
-    public Creature(String name, int typeId, short age, LocalDate birthDate, Breed breed) {
+    public Creature(String name, short age, LocalDate birthDate, Breed breed) {
         this.breed = breed;
         this.name = name;
-        this.typeId = typeId;
         this.age = age;
         this.birthDate = birthDate;
     }
@@ -50,15 +49,7 @@ public class Creature {
         this.id = id;
     }
 
-    public int getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(int typeId) {
-        this.typeId = typeId;
-    }
-
-    public int getAge() {
+    public short getAge() {
         return age;
     }
 
@@ -87,7 +78,6 @@ public class Creature {
         return "Creature{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", typeId=" + typeId +
                 ", age=" + age +
                 ", birthDate=" + birthDate +
                 ", breed=" + breed +

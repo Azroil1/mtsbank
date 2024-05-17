@@ -20,3 +20,5 @@ spring:
     allow-bean-definition-overriding: true
   flyway:
     enabled: true
+server:
+  port: 8090

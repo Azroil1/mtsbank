@@ -1,0 +1,34 @@
+<table>
+    <thead>
+    <title>Животные</title>
+    </thead>
+    <tbody>
+    <table border="6">
+        <thead>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Класс живитного</th>
+        <th>Возраст</th>
+        <th>Дата рождения</th>
+        <th>Удалить</th>
+        </thead>
+        <tbody>
+        <tr th:each="creature : ${creatures}">
+            <td th:text = "${creature.getId()}"></td>
+            <td th:text = "${creature.getName()}"></td>
+            <td th:text = "${creature.getBreed().getType()}"></td>
+            <td th:text = "${creature.getAge()}"></td>
+            <td th:text = "${creature.getBirthDate()}"></td>
+            <td>
+                <form th:action="@{/creature/ui/index/{id}(id=${creature.id})}" method="post">
+                    <input type="hidden" name="_method" value="delete" />
+                    <button type="submit">Удалить</button>
+                </form>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="/creature/ui/create">Добавить нового животного</a>
+    </tbody>
+</table>
