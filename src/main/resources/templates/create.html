@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+   <title>Создать новое животное</title>
+</head>
+<body>
+<h1>Создать новое животное</h1>
+<form th:action="@{/creature/ui/create}" th:object="${creature}" method="post">
+   <div>
+      <label for="name">Имя:</label>
+      <input type="text" id="name" th:field="*{name}" />
+   </div>
+   <div>
+      <label for="type">Класс животного:</label>
+      <input type="text" id="type" th:field="*{breed.type}" />
+   </div>
+   <div>
+      <label for="age">Возраст:</label>
+      <input type="number" id="age" th:field="*{age}" th:value="Short" />
+   </div>
+   <div>
+      <label for="birthDate">Дата рождения:</label>
+      <input type="date" id="birthDate" th:field="*{birthDate}"  />
+   </div>
+   <div>
+      <button type="submit">Сохранить</button>
+      <a th:href="@{/creature/ui/cancel-create}">
+         <button type="button">Отмена</button>
+      </a>
+   </div>
+</form>
+</body>
+</html>

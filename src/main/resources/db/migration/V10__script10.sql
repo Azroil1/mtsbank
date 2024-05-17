@@ -1,0 +1,1 @@
+alter table animals.creature ALTER COLUMN type_id TYPE bigint;
