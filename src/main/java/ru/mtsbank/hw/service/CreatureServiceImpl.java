@@ -1,6 +1,7 @@
 package ru.mtsbank.hw.service;
 
 import org.springframework.stereotype.Service;
+import ru.mtsbank.hw.annatation.PublicLogger;
 import ru.mtsbank.hw.entity.Breed;
 import ru.mtsbank.hw.entity.Creature;
 import ru.mtsbank.hw.repository.BreedRepository;
@@ -22,6 +23,7 @@ public class CreatureServiceImpl implements CreatureService{
         return creatureRepository.findAll();
     }
 
+    @PublicLogger("createCreature")
     @Override
     public void createCreature(Creature creature) {
         Breed breed = breedRepository.findByType(creature.getBreed().getType());
@@ -31,6 +33,7 @@ public class CreatureServiceImpl implements CreatureService{
         creatureRepository.save(creature);
     }
 
+    @PublicLogger(value = "Удаление животного", entering = true, exiting = true, level = "TRACE")
     @Override
     public void deleteCreature(Long creatureId) {
         creatureRepository.deleteById(creatureId);
