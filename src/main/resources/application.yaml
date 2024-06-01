@@ -5,6 +5,8 @@ animal:
     petNames: pet1,pet2,pet3
     predatorNames: predator, predatorbrator
 spring:
+  thymeleaf:
+    prefix: classpath:/templates/
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres?currentSchema=animals
     username: postgres
@@ -20,5 +22,6 @@ spring:
     allow-bean-definition-overriding: true
   flyway:
     enabled: true
+    locations: classpath:db/migration
 server:
   port: 8090

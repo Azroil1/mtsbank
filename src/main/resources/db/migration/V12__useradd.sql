@@ -1,0 +1,1 @@
+insert into animals.users(id, name, password, role) VALUES (1,'amir','123','ADMIN');

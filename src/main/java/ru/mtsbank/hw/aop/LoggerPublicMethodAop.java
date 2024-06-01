@@ -19,14 +19,14 @@ public class LoggerPublicMethodAop {
 
     Logger log = LoggerFactory.getLogger(LoggerPublicMethodAop.class);
 
-    @Pointcut(value = "execution(public * *(..)) && @annotation(ru.mtsbank.hw.annatation.PublicLogger)")
+    @Pointcut(value = "@annotation(ru.mtsbank.hw.annatation.PublicLogger)")
     public void callPublicMethod() {}
     @Before(value = "callPublicMethod()")
     public void logBefore(JoinPoint joinPoint) {
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
         PublicLogger publicLogger = method.getAnnotation(PublicLogger.class);
-        if(publicLogger.entering()){
-            log(publicLogger.level(), "Entering " + method.getName() + ". " + publicLogger.value());
+        if(publicLogger != null && publicLogger.entering()){
+            logMessage(publicLogger.level(), "Entering " + method.getName() + ". " + publicLogger.value());
         }
     }
     @After(value = "callPublicMethod()")
@@ -34,11 +34,11 @@ public class LoggerPublicMethodAop {
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
         PublicLogger publicLogger = method.getAnnotation(PublicLogger.class);
         if(publicLogger.exiting()){
-            log(publicLogger.level(), "Exiting " + method.getName() + ". " + publicLogger.value());
+            logMessage(publicLogger.level(), "Exiting " + method.getName() + ". " + publicLogger.value());
         }
     }
 
-    private void log(String level, String message){
+    private void logMessage(String level, String message){
         switch(level.toUpperCase()){
             case "TRACE":
                 log.trace(message);

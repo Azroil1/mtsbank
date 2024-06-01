@@ -1,45 +1,26 @@
-package ru.mtsbank.hw.entity;
-
+package ru.mtsbank.hw.dto;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "creature")
-public class Creature {
-    @Id
-    @Column(name = "id_creature")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_creature_sequence")
-    @SequenceGenerator(name = "id_creature_sequence", sequenceName = "id_creature_sequence", allocationSize = 1)
+public class CreatureDto {
     private long id;
     private String name;
     private short age;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
-    @ManyToOne()
-    @JoinColumn(name = "type_id", referencedColumnName = "id_type", columnDefinition = "bigint")
-    private Breed breed;
+    private BreedDto breed;
 
-    public Creature(String name, short age, LocalDate birthDate, Breed breed) {
-        this.breed = breed;
-        this.name = name;
-        this.age = age;
-        this.birthDate = birthDate;
-    }
-
-    public Creature() {
-
-    }
-
-    public Creature(long id, String name, short age, LocalDate birthDate, Breed breed) {
+    public CreatureDto(long id, String name, short age, LocalDate birthDate, BreedDto breed) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.birthDate = birthDate;
         this.breed = breed;
     }
+
+    public CreatureDto() {}
 
     public String getName() {
         return name;
@@ -73,17 +54,17 @@ public class Creature {
         this.birthDate = birthDate;
     }
 
-    public Breed getBreed() {
+    public BreedDto getBreed() {
         return breed;
     }
 
-    public void setBreed(Breed breed) {
+    public void setBreed(BreedDto breed) {
         this.breed = breed;
     }
 
     @Override
     public String toString() {
-        return "Creature{" +
+        return "CreatureDto{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", age=" + age +

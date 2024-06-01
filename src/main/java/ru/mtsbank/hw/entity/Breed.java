@@ -22,6 +22,17 @@ public class Breed {
     public Breed() {
     }
 
+    public Breed(long idBreed, String type, List<Creature> breedCreatures) {
+        this.idBreed = idBreed;
+        this.type = type;
+        this.breedCreatures = breedCreatures;
+    }
+
+    public Breed(String type, List<Creature> breedCreatures) {
+        this.type = type;
+        this.breedCreatures = breedCreatures;
+    }
+
     public Breed(String type) {
         this.type = type;
     }
