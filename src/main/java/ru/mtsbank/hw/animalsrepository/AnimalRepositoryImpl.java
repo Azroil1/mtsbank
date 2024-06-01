@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.mtsbank.hw.animal.AbstractAnimal;
 import ru.mtsbank.hw.animalservice.CreateAnimalServiceImpl;
+import ru.mtsbank.hw.annatation.PublicLogger;
 import ru.mtsbank.hw.exceptions.EmptyListException;
 import ru.mtsbank.hw.exceptions.NonValidArgumentException;
 import ru.mtsbank.hw.exceptions.SizeAnimalListException;
@@ -34,9 +35,10 @@ public class AnimalRepositoryImpl implements AnimalRepository {
             createAnimalServiceImpl.createAnimal();
         }
     }
-
+    @PublicLogger(value = "findLeapYearsName work", entering = true)
     @Override
     public Map<String,LocalDate> findLeapYearNames() {
+        String check = check();
         Objects.requireNonNull(createAnimalServiceImpl.getAnimalMap());
         Map<String,LocalDate> mapFindLeapYearNames;
         Stream<Map.Entry<String, List<AbstractAnimal>>> stream = createAnimalServiceImpl.getAnimalMap().entrySet().stream();
@@ -148,6 +150,10 @@ public class AnimalRepositoryImpl implements AnimalRepository {
                 .collect(Collectors.toList());
         ObjectMapperAnimalsForJSON.animalCollectionJson(abstractAnimalList, "findMinCostAnimals.json");
         return new CopyOnWriteArrayList<>(abstractAnimalList);
+    }
+    @PublicLogger(value = "Work check method", entering = true)
+    private String check(){
+        return "OK";
     }
 
 }

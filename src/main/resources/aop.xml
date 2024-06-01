@@ -1,0 +1,5 @@
+<aspectj>
+<aspects>
+    <aspect name = "ru.mtsbank.hw.aop.LoggerPublicMethodAop"/>
+</aspects>
+</aspectj>

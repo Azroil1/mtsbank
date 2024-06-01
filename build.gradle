@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.4'
     id 'io.spring.dependency-management' version '1.1.4'
+    id 'io.freefair.aspectj.post-compile-weaving' version '6.3.0'
 }
 
 group 'ru.mtsbank'
@@ -9,6 +10,16 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+}
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+compileTestJava.ajc.options.aspectpath.from = sourceSets.main.output
+[compileJava, compileTestJava].each {
+    it.ajc.options.compilerArgs += ['-xmlConfigured', "${projectDir}/src/main/resources/aop.xml"]
 }
 
 dependencies {
@@ -40,6 +51,7 @@ dependencies {
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.2'
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.18'
     // https://mvnrepository.com/artifact/org.flywaydb/flyway-core
     implementation 'org.flywaydb:flyway-core'
@@ -54,12 +66,14 @@ dependencies {
     // Log4j 2
     implementation 'org.apache.logging.log4j:log4j-core:2.14.1'
     implementation 'org.apache.logging.log4j:log4j-api:2.14.1'
-
-
-
-
-
-
+    implementation 'org.aspectj:aspectjrt:1.9.9'
+    implementation 'org.aspectj:aspectjweaver:1.9.9'
+    // https://mvnrepository.com/artifact/org.springframework/spring-webflux
+    implementation group: 'org.springframework', name: 'spring-webflux', version: '5.3.23'
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-contract-wiremock
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock', version: '3.1.5'
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
+    implementation 'org.springframework.boot:spring-boot-starter-security:2.7.18'
 
 }
 

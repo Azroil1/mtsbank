@@ -3,6 +3,7 @@ package ru.mtsbank.hw.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.mtsbank.hw.dto.CreatureDto;
 import ru.mtsbank.hw.entity.Creature;
 import ru.mtsbank.hw.service.CreatureServiceImpl;
 
@@ -33,7 +34,7 @@ public class UICreateController {
         return "create";
     }
     @PostMapping("/create")
-    public String createCreature(@ModelAttribute Creature creature) {
+    public String createCreature(@ModelAttribute CreatureDto creature) {
         creatureService.createCreature(creature);
         return "redirect:/creature/ui/index";
     }
