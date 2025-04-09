@@ -16,3 +16,4 @@ settings.gradle
 animal-starter/.gradle
 animal-starter/build
 gradle
+src/main/resources/results
